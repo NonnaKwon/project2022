@@ -5,7 +5,6 @@ import java.nio.ByteOrder;
 public class Protocol {
     private static byte[] paket;
 
-
     public static byte[] convertObjectToBytes(int type, int code, Object obj) throws IOException {
         byte[] objByteArr;
         ByteArrayOutputStream boas = new ByteArrayOutputStream();
@@ -42,6 +41,7 @@ public class Protocol {
         return buff.array();
 
     }
+
     public static int byteToInt(byte[] bytes){
         byte[] newBytes = new byte[4];
         final int size = Integer.SIZE/8;
