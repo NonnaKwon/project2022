@@ -3,14 +3,14 @@ package persistence.mapper;
 import org.apache.ibatis.annotations.*;
 import persistence.dto.DTO;
 
-import java.util.List;
 import java.util.ArrayList;
-import java.util.ArrayList;
+
 public interface KoreaMapper extends Mapper {
     String tableName = "korea";
 
+
     @Select("SELECT * FROM "+tableName)
-    @Results(id="americaSet", value = {
+    @Results(id="allset", value = {
             @Result(property = "date",column = "date"),
             @Result(property = "unit",column = "unit"),
             @Result(property = "ttb",column = "ttb"),
@@ -24,7 +24,7 @@ public interface KoreaMapper extends Mapper {
     public String selectOneBkpr(String date);
 
     @Select("SELECT bkpr FROM "+tableName+" WHERE date BETWEEN #{startDate} AND #{endDate}")
-    public ArrayList<String> selectBkpr(@Param("startDate") String startDate,@Param("endDate") String endDate);
+    public ArrayList<String> selectBkpr(@Param("startDate") String startDate, @Param("endDate") String endDate);
 
     @Insert("INSERT INTO "+tableName+" values (#{date}, #{unit}, #{ttb}, #{tts}, #{deal}, #{bkpr})")
     public boolean insert(DTO dto);

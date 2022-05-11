@@ -3,7 +3,6 @@ package persistence.dao;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import persistence.dto.DTO;
-import persistence.mapper.AmericaMapper;
 import persistence.mapper.Mapper;
 import persistence.mapper.MapperList;
 
@@ -50,12 +49,12 @@ public class DAO {
         return result;
     }
 
+
     public ArrayList<String> selectBkpr(String startDate, String endDate){
         ArrayList<String> list = null;
         SqlSession session = sqlSessionFactory.openSession();
         Mapper mapper = (Mapper) session.getMapper(MapperList.mapperList[country]);
         try{
-
             list = mapper.selectBkpr(startDate,endDate);
             session.commit();
         }catch(Exception e){

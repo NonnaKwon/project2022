@@ -1,13 +1,8 @@
 import org.apache.ibatis.session.SqlSessionFactory;
-import persistence.dao.DAO;
-import persistence.dto.DTO;
-import persistence.mapper.MapperList;
-import readAPI.ReadData;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -33,9 +28,8 @@ public class Main {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-
         }
+
         static class Task implements Runnable{
             Socket conn;
 
@@ -49,7 +43,5 @@ public class Main {
                 controller.run();
             }
         }
-//        ReadData readData = new ReadData(sqlSessionFactory);
-//        readData.allDataRead("2019");
 
 }

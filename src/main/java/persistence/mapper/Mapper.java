@@ -10,4 +10,5 @@ public interface Mapper {
     public String selectOneBkpr(String date);
     public ArrayList<String> selectBkpr(@Param("startDate") String startDate, @Param("endDate") String endDate);
     public boolean insert(DTO dto);
+
 }

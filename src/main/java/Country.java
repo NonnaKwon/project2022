@@ -1,7 +1,5 @@
-
-import org.apache.ibatis.session.SqlSessionFactory;
-import persistence.dao.*;
-
 public class Country {
-
+    static int getCode(String country){
+        return 0;
+    }
 }

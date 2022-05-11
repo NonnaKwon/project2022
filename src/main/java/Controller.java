@@ -5,13 +5,11 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-
 public class Controller {
     private SqlSessionFactory sqlSessionFactory = MyBatisConnectionFactory.getSqlSessionFactory();
     private Socket conn;
     private DataInputStream dis;
     private DataOutputStream dos;
-
 
     public Controller(Socket conn){
         this.conn = conn;
@@ -34,32 +32,27 @@ public class Controller {
                 byte[] dataSize = dis.readNBytes(4);
                 int size = Protocol.byteToInt(dataSize);
 
-                Exchange exchange = new Exchange();
+                ExchangeController exchange = new ExchangeController(sqlSessionFactory,dis,dos);
+                GraphController grap = new GraphController(sqlSessionFactory,dis,dos);
+
+                byte[] data = dis.readNBytes(size);
 
                 switch (type){
                     case 1 :
-                        exchange.run(code ,dis.readNBytes(size));
+                        System.out.println("여까지"+data);
+                        exchange.run(code ,data);
                         break;
                     case 2 :
+                        grap.run(code,dis.readNBytes(size));
                         break;
                     case 3 :
                         break;
-
                 }
-
 
             }catch (Exception e){
 
             }
-
-
-
         }
-
-
-
     }
-
-
 
 }

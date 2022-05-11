@@ -6,7 +6,7 @@ public class Protocol {
     private static byte[] paket;
 
 
-    public static byte[] convertObjectToBytes(byte type, byte code, Object obj) throws IOException {
+    public static byte[] convertObjectToBytes(int type, int code, Object obj) throws IOException {
         byte[] objByteArr;
         ByteArrayOutputStream boas = new ByteArrayOutputStream();
         try (ObjectOutputStream ois = new ObjectOutputStream(boas)) {
@@ -15,8 +15,8 @@ public class Protocol {
         }
         paket = new byte[6+objByteArr.length];
         byte[] sizeArr = intToByte(objByteArr.length);
-        paket[0] = type;
-        paket[1] = code;
+        paket[0] = (byte)type;
+        paket[1] = (byte)code;
         for(int i=0;i<4;i++){
             paket[2+i] = sizeArr[i];
         }
@@ -58,9 +58,5 @@ public class Protocol {
         buff.order(ByteOrder.BIG_ENDIAN);
         return buff.getInt();
     }
-
-
-
-
 
 }
