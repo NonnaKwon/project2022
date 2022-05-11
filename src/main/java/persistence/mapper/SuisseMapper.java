@@ -8,9 +8,9 @@ import persistence.dto.DTO;
 
 import java.util.List;
 
-public interface KoreaMapper {
-    @Select("SELECT * FROM korea")
-    @Results(id="koreaSet", value = {
+public interface SuisseMapper {
+    @Select("SELECT * FROM suisse")
+    @Results(id="suisseSet", value = {
             @Result(property = "date",column = "date"),
             @Result(property = "unit",column = "unit"),
             @Result(property = "ttb",column = "ttb"),
@@ -20,6 +20,7 @@ public interface KoreaMapper {
     })
     public List<DTO> selectAll();
 
-    @Insert("INSERT INTO korea values (#{date}, #{unit}, #{ttb}, #{tts}, #{deal}, #{bkpr})")
+    @Insert("INSERT INTO suisse values (#{date}, #{unit}, #{ttb}, #{tts}, #{deal}, #{bkpr})")
     public boolean insert(DTO dto);
 }
+

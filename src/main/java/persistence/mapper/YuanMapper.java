@@ -1,7 +1,7 @@
 package persistence.mapper;
 
 import org.apache.ibatis.annotations.*;
-import persistence.dto.YuanDTO;
+import persistence.dto.DTO;
 
 import java.util.List;
 
@@ -15,9 +15,9 @@ public interface YuanMapper {
             @Result(property = "deal",column = "deal"),
             @Result(property = "bkpr",column = "bkpr")
     })
-    public List<YuanDTO> selectAll();
+    public List<DTO> selectAll();
 
     @Insert("INSERT INTO yuan values (#{date}, #{unit}, #{ttb}, #{tts}, #{deal}, #{bkpr})")
-    public boolean insert(YuanDTO yuanDTO);
+    public boolean insert(DTO dto);
 
 }

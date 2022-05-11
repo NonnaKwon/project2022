@@ -2,22 +2,20 @@ package persistence.dao;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
-import persistence.dto.KoreaDTO;
-import persistence.dto.YuanDTO;
+import persistence.dto.DTO;
 import persistence.mapper.KoreaMapper;
-import persistence.mapper.YuanMapper;
 
 import java.util.List;
 
-public class KoreaDAO {
+public class KoreaDAO implements DAO {
     SqlSessionFactory sqlSessionFactory;
 
     public KoreaDAO(SqlSessionFactory sqlSessionFctory){
         this.sqlSessionFactory = sqlSessionFctory;
     }
 
-    public List<KoreaDTO> selectAll(){
-        List<KoreaDTO> list = null;
+    public List<DTO> selectAll(){
+        List<DTO> list = null;
         SqlSession session = sqlSessionFactory.openSession();
         KoreaMapper mapper = session.getMapper(KoreaMapper.class);
         try{
@@ -32,12 +30,12 @@ public class KoreaDAO {
         return list;
     }
 
-    public boolean insert(KoreaDTO koreaDTO){
+    public boolean insert(DTO dto){
         boolean b = false;
         SqlSession session = sqlSessionFactory.openSession();
         KoreaMapper mapper = session.getMapper(KoreaMapper.class);
         try{
-            b = mapper.insert(koreaDTO);
+            b = mapper.insert(dto);
             session.commit();
         }catch (Exception e) {
             e.getStackTrace();

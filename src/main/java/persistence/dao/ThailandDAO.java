@@ -3,21 +3,22 @@ package persistence.dao;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import persistence.dto.DTO;
-import persistence.mapper.JapanMapper;
+import persistence.mapper.AmericaMapper;
+import persistence.mapper.ThailandMapper;
 
 import java.util.List;
 
-public class JapanDAO implements DAO {
+public class ThailandDAO implements DAO {
     SqlSessionFactory sqlSessionFactory;
 
-    public JapanDAO(SqlSessionFactory sqlSessionFctory){
+    public ThailandDAO(SqlSessionFactory sqlSessionFctory){
         this.sqlSessionFactory = sqlSessionFctory;
     }
 
     public List<DTO> selectAll(){
         List<DTO> list = null;
         SqlSession session = sqlSessionFactory.openSession();
-        JapanMapper mapper = session.getMapper(JapanMapper.class);
+        ThailandMapper mapper = session.getMapper(ThailandMapper.class);
         try{
             list = mapper.selectAll();
             session.commit();
@@ -33,7 +34,7 @@ public class JapanDAO implements DAO {
     public boolean insert(DTO dto){
         boolean b = false;
         SqlSession session = sqlSessionFactory.openSession();
-        JapanMapper mapper = session.getMapper(JapanMapper.class);
+        ThailandMapper mapper = session.getMapper(ThailandMapper.class);
         try{
             b = mapper.insert(dto);
             session.commit();

@@ -1,12 +1,9 @@
 package persistence.mapper;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
-import persistence.dto.AmericaDTO;
-import persistence.dto.YuanDTO;
+import org.apache.ibatis.annotations.*;
+import persistence.dto.DTO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface AmericaMapper {
@@ -19,8 +16,14 @@ public interface AmericaMapper {
             @Result(property = "deal",column = "deal"),
             @Result(property = "bkpr",column = "bkpr")
     })
-    public List<AmericaDTO> selectAll();
+    public ArrayList<DTO> selectAll();
+
+    @Select("SELECT bkpr FROM america WHERE date = #{date}")
+    public String selectOneBkpr(String date);
+
+    @Select("SELECT bkpr FROM america WHERE date BETWEEN #{startDate} AND #{endDate}")
+    public ArrayList<String> selectBkpr(@Param("startDate") String startDate,@Param("endDate") String endDate);
 
     @Insert("INSERT INTO america values (#{date}, #{unit}, #{ttb}, #{tts}, #{deal}, #{bkpr})")
-    public boolean insert(AmericaDTO americaDTO);
+    public boolean insert(DTO dto);
 }

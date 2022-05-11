@@ -2,20 +2,20 @@ package persistence.dao;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
-import persistence.dto.YuanDTO;
+import persistence.dto.DTO;
 import persistence.mapper.YuanMapper;
 
 import java.util.List;
 
-public class YuanDAO {
+public class YuanDAO implements DAO {
     SqlSessionFactory sqlSessionFactory;
 
     public YuanDAO(SqlSessionFactory sqlSessionFctory){
         this.sqlSessionFactory = sqlSessionFctory;
     }
 
-    public List<YuanDTO> selectAll(){
-        List<YuanDTO> list = null;
+    public List<DTO> selectAll(){
+        List<DTO> list = null;
         SqlSession session = sqlSessionFactory.openSession();
         YuanMapper mapper = session.getMapper(YuanMapper.class);
         try{
@@ -30,12 +30,12 @@ public class YuanDAO {
         return list;
     }
 
-    public boolean insert(YuanDTO yuanDTO){
+    public boolean insert(DTO dto){
         boolean b = false;
         SqlSession session = sqlSessionFactory.openSession();
         YuanMapper mapper = session.getMapper(YuanMapper.class);
         try{
-            b = mapper.insert(yuanDTO);
+            b = mapper.insert(dto);
             session.commit();
         }catch (Exception e) {
             e.getStackTrace();

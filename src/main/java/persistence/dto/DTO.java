@@ -7,8 +7,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-
-public class JapanDTO {
+public class DTO {
     private String date;
     private String unit;
     private String ttb;
