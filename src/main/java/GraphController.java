@@ -38,8 +38,8 @@ public class GraphController {
 
     public void graph(byte[] data) throws IOException, ClassNotFoundException {
         GraphRequestDTO graphRequestDTO = (GraphRequestDTO) Protocol.convertBytesToObject(data);
-        int countryCode = Country.getCode(graphRequestDTO.getCountry());
-        ArrayList<String> list = daos[countryCode].selectBkpr(graphRequestDTO.getStartDate(),graphRequestDTO.getEndDate());
+        //int countryCode = Country.getCode(graphRequestDTO.getCountry());
+        ArrayList<String> list = daos[graphRequestDTO.getCountry()].selectBkpr(graphRequestDTO.getStartDate(),graphRequestDTO.getEndDate());
         dos.write(Protocol.convertObjectToBytes(2,1,list));
     }
 

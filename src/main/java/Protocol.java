@@ -10,7 +10,7 @@ public class Protocol {
         ByteArrayOutputStream boas = new ByteArrayOutputStream();
         try (ObjectOutputStream ois = new ObjectOutputStream(boas)) {
             ois.writeObject(obj);
-            objByteArr = boas.toByteArray();
+            objByteArr = boas.toByteArray(); //객체가 들어있음
         }
         paket = new byte[6+objByteArr.length];
         byte[] sizeArr = intToByte(objByteArr.length);
@@ -19,8 +19,8 @@ public class Protocol {
         for(int i=0;i<4;i++){
             paket[2+i] = sizeArr[i];
         }
-        for(int i=0;i<sizeArr.length;i++){
-            paket[6+i] = sizeArr[i];
+        for(int i=0;i<objByteArr.length;i++){
+            paket[6+i] = objByteArr[i];
         }
         return paket;
     }
@@ -32,6 +32,8 @@ public class Protocol {
             return ois.readObject();
         }
     }
+
+
 
 
     public static byte[] intToByte(int i){

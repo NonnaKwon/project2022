@@ -67,8 +67,6 @@ public class ReadData {
                         dto.setTts((String) tutorials.get("tts"));
                         dto.setDeal((String) tutorials.get("deal_bas_r"));
                         dto.setBkpr((String) tutorials.get("bkpr"));
-//                       if()
-//                       daos[code].insert(dto);
                     }
                     in.close();
                 } catch (FileNotFoundException e) {
@@ -93,7 +91,7 @@ public class ReadData {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         Calendar calendar = Calendar.getInstance();
         String strToday = sdf.format(calendar.getTime());
-        searchDate = strToday;
+        searchDate = "20220511";
 
         apiURL = "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=" + authKey + "&searchdate=" + searchDate + "&data=" + dataType;
         try {
@@ -104,6 +102,7 @@ public class ReadData {
             JSONArray a = null;
             while ((inputLine = in.readLine()) != null) {
                 a = (JSONArray) parser.parse(inputLine);
+                System.out.println(inputLine);
             }
             for (Object o : a) {
                 DTO dto = new DTO();
@@ -114,7 +113,7 @@ public class ReadData {
                 dto.setTts((String) tutorials.get("tts"));
                 dto.setDeal((String) tutorials.get("deal_bas_r"));
                 dto.setBkpr((String) tutorials.get("bkpr"));
-
+                System.out.println(dto.toString());
                 list.add(dto);
             }
 

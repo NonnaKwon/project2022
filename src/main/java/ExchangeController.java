@@ -17,7 +17,8 @@ public class ExchangeController {
     private DataOutputStream dos;
 
     public ExchangeController(SqlSessionFactory sqlSessionFactory,DataInputStream dis,DataOutputStream dos){
-        nowData = ReadData.dayTimeRead();
+        ReadData readData = new ReadData(sqlSessionFactory);
+        nowData = readData.dayTimeRead();
         for(int i=0;i<31;i++){
             daos[i] = new DAO(sqlSessionFactory,i);
         }
@@ -45,7 +46,8 @@ public class ExchangeController {
         DTO dto = nowData.get(exchangeDTO.getCountry1());
 
         long amount = exchangeDTO.getAmount(); //예를들어 1200원이면
-        double result = Integer.parseInt(dto.getBkpr()) / (double)amount; // 1달러 이렇게
+        String bkpr = dto.getBkpr().replace(",","");
+        double result = (double)amount / Integer.parseInt(bkpr); // 1달러 이렇게
 
         dos.write(Protocol.convertObjectToBytes(1,1,result));
     }
@@ -55,7 +57,8 @@ public class ExchangeController {
         DTO dto = nowData.get(exchangeDTO.getCountry1());
 
         long amount = exchangeDTO.getAmount(); //예를들어 1달러면
-        long result = Integer.parseInt(dto.getBkpr()) * amount; //1200원 이렇게
+        String bkpr = dto.getBkpr().replace(",","");
+        long result = Integer.parseInt(bkpr) * amount; //1200원 이렇게
 
         dos.write(Protocol.convertObjectToBytes(1,1,result));
     }
