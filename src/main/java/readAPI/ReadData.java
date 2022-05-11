@@ -18,79 +18,23 @@ import java.util.Calendar;
 
 public class ReadData {
     static SqlSessionFactory sqlSessionFactory;
-    static YuanDAO yuanDAO;
-    static KoreaDAO koreaDAO;
-    static AmericaDAO americaDAO;
-    static JapanDAO japanDAO;
-    static ArabDAO arabDAO;
-    static AustraliaDAO australiaDAO;
-    static AustriaDAO austriaDAO;
-    static BahrainDAO bahrainDAO;
-    static BelgiumDAO belgiumDAO;
-    static CanadaDAO canadaDAO;
-    static CfaDAO cfaDAO;
-    static DenmarkDAO denmarkDAO;
-    static EuroDAO euroDAO;
-    static FinlandDAO finlandDAO;
-    static FranceDAO franceDAO;
-    static GermanyDAO germanyDAO;
-    static HongkongDAO hongkongDAO;
-    static IndonesiaDAO indonesiaDAO;
-    static ItalyDAO italyDAO;
-    static KuwaitDAO kuwaitDAO;
-    static MalaysiaDAO malaysiaDAO;
-    static NetherlandsDAO netherlandsDAO;
-    static NewzealandDAO newzealandDAO;
-    static NorwayDAO norwayDAO;
-    static SaudiDAO saudiDAO;
-    static SingaporeDAO singaporeDAO;
-    static SpainDAO spainDAO;
-    static SuisseDAO suisseDAO;
-    static SwedenDAO swedenDAO;
-    static ThailandDAO thailandDAO;
-    static UkDAO ukDAO;
+    private DAO[] daos;
 
     private static String authKey = "hV5ckkLjhPQvfzPw5eZOyVUM7acbHBFp";
     private static String dataType = "AP01";
     private static String searchDate;
     private static String apiURL;
 
+    private static final int COUNTRY_COUNT = 31;
     private static final int DAY_MAX = 31;
     private static final int MONTH_MAX = 12;
 
     public ReadData(SqlSessionFactory sqlSessionFactory){
         this.sqlSessionFactory = sqlSessionFactory;
-        yuanDAO = new YuanDAO(sqlSessionFactory);
-        koreaDAO = new KoreaDAO(sqlSessionFactory);
-        americaDAO = new AmericaDAO(sqlSessionFactory);
-        japanDAO = new JapanDAO(sqlSessionFactory);
-        arabDAO = new ArabDAO(sqlSessionFactory);
-        australiaDAO = new AustraliaDAO(sqlSessionFactory);
-        austriaDAO = new AustriaDAO(sqlSessionFactory);
-        bahrainDAO = new BahrainDAO(sqlSessionFactory);
-        belgiumDAO = new BelgiumDAO(sqlSessionFactory);
-        canadaDAO = new CanadaDAO(sqlSessionFactory);
-        cfaDAO = new CfaDAO(sqlSessionFactory);
-        denmarkDAO = new DenmarkDAO(sqlSessionFactory);
-        euroDAO = new EuroDAO(sqlSessionFactory);
-        finlandDAO = new FinlandDAO(sqlSessionFactory);
-        franceDAO = new FranceDAO(sqlSessionFactory);
-        germanyDAO = new GermanyDAO(sqlSessionFactory);
-        hongkongDAO = new HongkongDAO(sqlSessionFactory);
-        indonesiaDAO = new IndonesiaDAO(sqlSessionFactory);
-        italyDAO = new ItalyDAO(sqlSessionFactory);
-        kuwaitDAO = new KuwaitDAO(sqlSessionFactory);
-        malaysiaDAO = new MalaysiaDAO(sqlSessionFactory);
-        netherlandsDAO = new NetherlandsDAO(sqlSessionFactory);
-        newzealandDAO = new NewzealandDAO(sqlSessionFactory);
-        norwayDAO = new NorwayDAO(sqlSessionFactory);
-        saudiDAO = new SaudiDAO(sqlSessionFactory);
-        singaporeDAO = new SingaporeDAO(sqlSessionFactory);
-        spainDAO = new SpainDAO(sqlSessionFactory);
-        suisseDAO = new SuisseDAO(sqlSessionFactory);
-        swedenDAO = new SwedenDAO(sqlSessionFactory);
-        thailandDAO = new ThailandDAO(sqlSessionFactory);
-        ukDAO = new UkDAO(sqlSessionFactory);
+        daos = new DAO[COUNTRY_COUNT];
+        for(int i=0;i<daos.length;i++){
+            daos[i] = new DAO(sqlSessionFactory,i);
+        }
     }
 
     public static void allDataRead(String year){ //과거데이터 읽기
@@ -113,7 +57,7 @@ public class ReadData {
 
                     for (Object o : a) {
                         JSONObject tutorials = (JSONObject) o;
-                        String key = (String)tutorials.get("cur_nm");
+                        String key = (String)tutorials.get("cur_unit");
                         DTO.setDate(searchDate);
                         DTO.setUnit((String)tutorials.get("cur_unit"));
                         DTO.setTtb((String)tutorials.get("ttb"));
@@ -121,69 +65,69 @@ public class ReadData {
                         DTO.setDeal((String)tutorials.get("deal_bas_r"));
                         DTO.setBkpr((String)tutorials.get("bkpr"));
 
-                        if(key.equals("한국 원")){
-                            koreaDAO.insert(DTO);
-                        }else if(key.equals("위안화")){
-                            yuanDAO.insert(DTO);
-                        }else if(key.equals("일본 옌")){
-                            japanDAO.insert(DTO);
-                        }else if(key.equals("아랍에미리트 디르함")){
-                            arabDAO.insert(DTO);
-                        }else if(key.equals("오스트리아 실링")) {
-                            austriaDAO.insert(DTO);
-                        }else if(key.equals("호주 달러")) {
-                            australiaDAO.insert(DTO);
-                        }else if(key.equals("바레인 디나르")) {
-                            bahrainDAO.insert(DTO);
-                        }else if(key.equals("캐나다 달러")) {
-                            canadaDAO.insert(DTO);
-                        }else if(key.equals("스위스 프랑")) {
-                            suisseDAO.insert(DTO);
-                        }else if(key.equals("독일 마르크")) {//
-                            germanyDAO.insert(DTO);
-                        }else if(key.equals("덴마아크 크로네")) {
-                            denmarkDAO.insert(DTO);
-                        }else if(key.equals("스페인 페세타")) {//
-                            spainDAO.insert(DTO);
-                        }else if(key.equals("핀란드 마르카")) {//
-                            finlandDAO.insert(DTO);
-                        }else if(key.equals("유로")) {//
-                            euroDAO.insert(DTO);
-                        }else if(key.equals("프랑스 프랑")) {//
-                            franceDAO.insert(DTO);
-                        }else if(key.equals("영국 파운드")) {
-                            ukDAO.insert(DTO);
-                        }else if(key.equals("홍콩 달러")) {
-                            hongkongDAO.insert(DTO);
-                        }else if(key.equals("인도네시아 루피아")) {//
-                            indonesiaDAO.insert(DTO);
-                        }else if(key.equals("쿠웨이트 디나르")) {
-                            kuwaitDAO.insert(DTO);
-                        }else if(key.equals("말레이지아 링기트")) {
-                            malaysiaDAO.insert(DTO);
-                        }else if(key.equals("네델란드 길더")) {//
-                            netherlandsDAO.insert(DTO);
-                        }else if(key.equals("노르웨이 크로네")) {
-                            norwayDAO.insert(DTO);
-                        }else if(key.equals("뉴질랜드 달러")) {
-                            newzealandDAO.insert(DTO);
-                        }else if(key.equals("사우디 리얄")) {
-                            saudiDAO.insert(DTO);
-                        }else if(key.equals("스웨덴 크로나")) {
-                            swedenDAO.insert(DTO);
-                        }else if(key.equals("싱가포르 달러")) {
-                            singaporeDAO.insert(DTO);
-                        }else if(key.equals("태국 바트")) {
-                            thailandDAO.insert(DTO);
-                        }else if(key.equals("미국 달러")) {
-                            americaDAO.insert(DTO);
-                        }else if(key.equals("이태리 리라")) {//
-                            italyDAO.insert(DTO);
-                        }else if(key.equals("씨에프에이 프랑(비씨에이오)")) {//
-                            cfaDAO.insert(DTO);
-                        }else if(key.equals("벨기에 프랑")) {//
-                            belgiumDAO.insert(DTO);
-                        }
+//                        if(key.equals("한국 원")){
+//                            koreaDAO.insert(DTO);
+//                        }else if(key.equals("위안화")){
+//                            yuanDAO.insert(DTO);
+//                        }else if(key.equals("일본 옌")){
+//                            japanDAO.insert(DTO);
+//                        }else if(key.equals("아랍에미리트 디르함")){
+//                            arabDAO.insert(DTO);
+//                        }else if(key.equals("오스트리아 실링")) {
+//                            austriaDAO.insert(DTO);
+//                        }else if(key.equals("호주 달러")) {
+//                            australiaDAO.insert(DTO);
+//                        }else if(key.equals("바레인 디나르")) {
+//                            bahrainDAO.insert(DTO);
+//                        }else if(key.equals("캐나다 달러")) {
+//                            canadaDAO.insert(DTO);
+//                        }else if(key.equals("스위스 프랑")) {
+//                            suisseDAO.insert(DTO);
+//                        }else if(key.equals("독일 마르크")) {//
+//                            germanyDAO.insert(DTO);
+//                        }else if(key.equals("덴마아크 크로네")) {
+//                            denmarkDAO.insert(DTO);
+//                        }else if(key.equals("스페인 페세타")) {//
+//                            spainDAO.insert(DTO);
+//                        }else if(key.equals("핀란드 마르카")) {//
+//                            finlandDAO.insert(DTO);
+//                        }else if(key.equals("유로")) {//
+//                            euroDAO.insert(DTO);
+//                        }else if(key.equals("프랑스 프랑")) {//
+//                            franceDAO.insert(DTO);
+//                        }else if(key.equals("영국 파운드")) {
+//                            ukDAO.insert(DTO);
+//                        }else if(key.equals("홍콩 달러")) {
+//                            hongkongDAO.insert(DTO);
+//                        }else if(key.equals("인도네시아 루피아")) {//
+//                            indonesiaDAO.insert(DTO);
+//                        }else if(key.equals("쿠웨이트 디나르")) {
+//                            kuwaitDAO.insert(DTO);
+//                        }else if(key.equals("말레이지아 링기트")) {
+//                            malaysiaDAO.insert(DTO);
+//                        }else if(key.equals("네델란드 길더")) {//
+//                            netherlandsDAO.insert(DTO);
+//                        }else if(key.equals("노르웨이 크로네")) {
+//                            norwayDAO.insert(DTO);
+//                        }else if(key.equals("뉴질랜드 달러")) {
+//                            newzealandDAO.insert(DTO);
+//                        }else if(key.equals("사우디 리얄")) {
+//                            saudiDAO.insert(DTO);
+//                        }else if(key.equals("스웨덴 크로나")) {
+//                            swedenDAO.insert(DTO);
+//                        }else if(key.equals("싱가포르 달러")) {
+//                            singaporeDAO.insert(DTO);
+//                        }else if(key.equals("태국 바트")) {
+//                            thailandDAO.insert(DTO);
+//                        }else if(key.equals("미국 달러")) {
+//                            americaDAO.insert(DTO);
+//                        }else if(key.equals("이태리 리라")) {//
+//                            italyDAO.insert(DTO);
+//                        }else if(key.equals("씨에프에이 프랑(비씨에이오)")) {//
+//                            cfaDAO.insert(DTO);
+//                        }else if(key.equals("벨기에 프랑")) {//
+//                            belgiumDAO.insert(DTO);
+//                        }
                     }
                     in.close();
                 } catch (FileNotFoundException e) {

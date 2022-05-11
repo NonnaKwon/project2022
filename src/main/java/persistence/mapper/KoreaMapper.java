@@ -1,16 +1,16 @@
 package persistence.mapper;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import persistence.dto.DTO;
 
 import java.util.List;
+import java.util.ArrayList;
+import java.util.ArrayList;
+public interface KoreaMapper extends Mapper {
+    String tableName = "korea";
 
-public interface KoreaMapper {
-    @Select("SELECT * FROM korea")
-    @Results(id="koreaSet", value = {
+    @Select("SELECT * FROM "+tableName)
+    @Results(id="americaSet", value = {
             @Result(property = "date",column = "date"),
             @Result(property = "unit",column = "unit"),
             @Result(property = "ttb",column = "ttb"),
@@ -18,8 +18,14 @@ public interface KoreaMapper {
             @Result(property = "deal",column = "deal"),
             @Result(property = "bkpr",column = "bkpr")
     })
-    public List<DTO> selectAll();
+    public ArrayList<DTO> selectAll();
 
-    @Insert("INSERT INTO korea values (#{date}, #{unit}, #{ttb}, #{tts}, #{deal}, #{bkpr})")
+    @Select("SELECT bkpr FROM "+tableName+" WHERE date = #{date}")
+    public String selectOneBkpr(String date);
+
+    @Select("SELECT bkpr FROM "+tableName+" WHERE date BETWEEN #{startDate} AND #{endDate}")
+    public ArrayList<String> selectBkpr(@Param("startDate") String startDate,@Param("endDate") String endDate);
+
+    @Insert("INSERT INTO "+tableName+" values (#{date}, #{unit}, #{ttb}, #{tts}, #{deal}, #{bkpr})")
     public boolean insert(DTO dto);
 }
