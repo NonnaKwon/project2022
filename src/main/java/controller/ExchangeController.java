@@ -1,3 +1,5 @@
+package controller;
+
 import org.apache.ibatis.session.SqlSessionFactory;
 import persistence.dao.DAO;
 import persistence.dto.DTO;
@@ -41,6 +43,7 @@ public class ExchangeController {
 
     }
 
+
     public void koreaToOtherExchange(byte[] data) throws IOException, ClassNotFoundException {
         ExchangeDTO exchangeDTO = (ExchangeDTO) Protocol.convertBytesToObject(data);
         DTO dto = nowData.get(exchangeDTO.getCountry1());
@@ -51,6 +54,8 @@ public class ExchangeController {
 
         dos.write(Protocol.convertObjectToBytes(1,1,result));
     }
+
+
 
     public void otherToKoreaExchange(byte[] data) throws IOException, ClassNotFoundException {
         ExchangeDTO exchangeDTO = (ExchangeDTO) Protocol.convertBytesToObject(data);

@@ -1,3 +1,5 @@
+import controller.Controller;
+import controller.MyBatisConnectionFactory;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.io.IOException;

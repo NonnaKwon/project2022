@@ -12,5 +12,5 @@ import java.io.Serializable;
 public class GraphRequestDTO implements Serializable {
     private String startDate;
     private String endDate;
-    private int country;
+    private String country;
 }

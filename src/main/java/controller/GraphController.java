@@ -1,3 +1,5 @@
+package controller;
+
 import org.apache.ibatis.session.SqlSessionFactory;
 import persistence.dao.DAO;
 import persistence.dto.DTO;
@@ -8,6 +10,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+
 
 public class GraphController {
     private ArrayList<DTO> nowData;
@@ -22,7 +25,6 @@ public class GraphController {
         }
         this.dis = dis;
         this.dos = dos;
-
     }
 
     public void run(int code,byte[] data) throws IOException, ClassNotFoundException {
@@ -38,8 +40,8 @@ public class GraphController {
 
     public void graph(byte[] data) throws IOException, ClassNotFoundException {
         GraphRequestDTO graphRequestDTO = (GraphRequestDTO) Protocol.convertBytesToObject(data);
-        //int countryCode = Country.getCode(graphRequestDTO.getCountry());
-        ArrayList<String> list = daos[graphRequestDTO.getCountry()].selectBkpr(graphRequestDTO.getStartDate(),graphRequestDTO.getEndDate());
+        int countryCode = Country.getCode(graphRequestDTO.getCountry());
+        ArrayList<String> list = daos[countryCode].selectBkpr(graphRequestDTO.getStartDate(),graphRequestDTO.getEndDate());
         dos.write(Protocol.convertObjectToBytes(2,1,list));
     }
 

@@ -1,3 +1,5 @@
+package controller;
+
 import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.io.DataInputStream;
