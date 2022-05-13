@@ -3,8 +3,10 @@ package controller;
 import org.apache.ibatis.session.SqlSessionFactory;
 import persistence.dao.DAO;
 import persistence.dto.DTO;
-import persistence.dto.GraphRequestDTO;
+import persistence.dto.GraphDTO;
 import readAPI.ReadData;
+import service.Country;
+import service.GraphService;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -17,20 +19,19 @@ public class GraphController {
     private DataInputStream dis;
     private DataOutputStream dos;
     private DAO[] daos = new DAO[31];
+    private GraphService graphService;
 
     GraphController(SqlSessionFactory sqlSessionFactory, DataInputStream dis, DataOutputStream dos){
-        nowData = ReadData.dayTimeRead();
-        for(int i=0;i<31;i++){
-            daos[i] = new DAO(sqlSessionFactory,i);
-        }
+        nowData = ReadData.dayTimeRead(sqlSessionFactory);
         this.dis = dis;
         this.dos = dos;
+        graphService = new GraphService(sqlSessionFactory);
     }
 
     public void run(int code,byte[] data) throws IOException, ClassNotFoundException {
         switch (code){
             case 1:
-                graph(data);
+                bkprGraph(data);
                 break;
             case 2:
                 break;
@@ -38,10 +39,9 @@ public class GraphController {
         }
     }
 
-    public void graph(byte[] data) throws IOException, ClassNotFoundException {
-        GraphRequestDTO graphRequestDTO = (GraphRequestDTO) Protocol.convertBytesToObject(data);
-        int countryCode = Country.getCode(graphRequestDTO.getCountry());
-        ArrayList<String> list = daos[countryCode].selectBkpr(graphRequestDTO.getStartDate(),graphRequestDTO.getEndDate());
+    public void bkprGraph(byte[] data) throws IOException, ClassNotFoundException {
+        GraphDTO graphRequestDTO = (GraphDTO) Protocol.convertBytesToObject(data);
+        ArrayList<String> list = graphService.bkprGraphService(graphRequestDTO);
         dos.write(Protocol.convertObjectToBytes(2,1,list));
     }
 

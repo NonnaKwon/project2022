@@ -9,13 +9,14 @@ import java.net.Socket;
 import java.net.SocketException;
 
 public class Controller {
-    private SqlSessionFactory sqlSessionFactory = MyBatisConnectionFactory.getSqlSessionFactory();
+    private SqlSessionFactory sqlSessionFactory;
     private Socket conn;
     private DataInputStream dis;
     private DataOutputStream dos;
 
     public Controller(Socket conn){
         this.conn = conn;
+        sqlSessionFactory = MyBatisConnectionFactory.getSqlSessionFactory();
     }
 
     public void run(){

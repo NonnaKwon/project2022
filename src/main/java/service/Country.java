@@ -1,4 +1,4 @@
-package controller;
+package service;
 
 public class Country {
     static int getCode(String country){

@@ -5,6 +5,7 @@ import persistence.dao.DAO;
 import persistence.dto.DTO;
 import persistence.dto.ExchangeDTO;
 import readAPI.ReadData;
+import service.ExchangeService;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -12,18 +13,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class ExchangeController {
-
-    private DAO[] daos = new DAO[31];
+    private SqlSessionFactory sqlSessionFactory;
     private ArrayList<DTO> nowData;
     private DataInputStream dis;
     private DataOutputStream dos;
+    private ExchangeService exchangeService;
 
     public ExchangeController(SqlSessionFactory sqlSessionFactory,DataInputStream dis,DataOutputStream dos){
-        ReadData readData = new ReadData(sqlSessionFactory);
-        nowData = readData.dayTimeRead();
-        for(int i=0;i<31;i++){
-            daos[i] = new DAO(sqlSessionFactory,i);
-        }
+        nowData = ReadData.dayTimeRead(sqlSessionFactory);
+        exchangeService = new ExchangeService(sqlSessionFactory);
         this.dis = dis;
         this.dos = dos;
     }
@@ -48,9 +46,7 @@ public class ExchangeController {
         ExchangeDTO exchangeDTO = (ExchangeDTO) Protocol.convertBytesToObject(data);
         DTO dto = nowData.get(exchangeDTO.getCountry1());
 
-        long amount = exchangeDTO.getAmount(); //예를들어 1200원이면
-        String bkpr = dto.getBkpr().replace(",","");
-        double result = (double)amount / Integer.parseInt(bkpr); // 1달러 이렇게
+        double result = exchangeService.koreaToOtherService(exchangeDTO,dto);
 
         dos.write(Protocol.convertObjectToBytes(1,1,result));
     }
@@ -61,9 +57,7 @@ public class ExchangeController {
         ExchangeDTO exchangeDTO = (ExchangeDTO) Protocol.convertBytesToObject(data);
         DTO dto = nowData.get(exchangeDTO.getCountry1());
 
-        long amount = exchangeDTO.getAmount(); //예를들어 1달러면
-        String bkpr = dto.getBkpr().replace(",","");
-        long result = Integer.parseInt(bkpr) * amount; //1200원 이렇게
+        double result = exchangeService.otherToKoreaService(exchangeDTO,dto);
 
         dos.write(Protocol.convertObjectToBytes(1,1,result));
     }

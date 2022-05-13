@@ -1,5 +1,6 @@
 package readAPI;
 
+import controller.MyBatisConnectionFactory;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -32,15 +33,13 @@ public class ReadData {
     private static final int DAY_MAX = 31;
     private static final int MONTH_MAX = 12;
 
-    public ReadData(SqlSessionFactory sqlSessionFactory) {
-        this.sqlSessionFactory = sqlSessionFactory;
+    public static void allDataRead(String year) { //과거데이터 읽기
+        sqlSessionFactory = MyBatisConnectionFactory.getSqlSessionFactory();
         daos = new DAO[COUNTRY_COUNT];
         for (int i = 0; i < daos.length; i++) {
             daos[i] = new DAO(sqlSessionFactory, i);
         }
-    }
 
-    public static void allDataRead(String year) { //과거데이터 읽기
         DTO dto = new DTO();
         JSONParser parser = new JSONParser();
 
@@ -84,14 +83,19 @@ public class ReadData {
         }
     }
 
-    public static ArrayList<DTO> dayTimeRead() { //오늘꺼 받아오기
+    public static ArrayList<DTO> dayTimeRead(SqlSessionFactory sqlSessionFactory) { //오늘꺼 받아오기
+        daos = new DAO[COUNTRY_COUNT];
+        for (int i = 0; i < daos.length; i++) {
+            daos[i] = new DAO(sqlSessionFactory, i);
+        }
+
         ArrayList<DTO> list = new ArrayList<DTO>();
         JSONParser parser = new JSONParser();
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         Calendar calendar = Calendar.getInstance();
         String strToday = sdf.format(calendar.getTime());
-        searchDate = "20220511";
+        searchDate = "20220513";
 
         apiURL = "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=" + authKey + "&searchdate=" + searchDate + "&data=" + dataType;
         try {
@@ -133,6 +137,63 @@ public class ReadData {
 
         return list;
     }
+
+    public static ArrayList<DTO> dayTimeRead() { //오늘꺼 받아오기
+        sqlSessionFactory = MyBatisConnectionFactory.getSqlSessionFactory();
+        daos = new DAO[COUNTRY_COUNT];
+        for (int i = 0; i < daos.length; i++) {
+            daos[i] = new DAO(sqlSessionFactory, i);
+        }
+
+        ArrayList<DTO> list = new ArrayList<DTO>();
+        JSONParser parser = new JSONParser();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        Calendar calendar = Calendar.getInstance();
+        String strToday = sdf.format(calendar.getTime());
+        searchDate = strToday;
+
+        apiURL = "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=" + authKey + "&searchdate=" + searchDate + "&data=" + dataType;
+        try {
+            URL oracle = new URL(apiURL);
+            URLConnection yc = oracle.openConnection();
+            BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+            String inputLine;
+            JSONArray a = null;
+            while ((inputLine = in.readLine()) != null) {
+                a = (JSONArray) parser.parse(inputLine);
+                System.out.println(inputLine);
+            }
+            for (Object o : a) {
+                DTO dto = new DTO();
+                JSONObject tutorials = (JSONObject) o;
+                dto.setDate(searchDate);
+                dto.setUnit((String) tutorials.get("cur_unit"));
+                dto.setTtb((String) tutorials.get("ttb"));
+                dto.setTts((String) tutorials.get("tts"));
+                dto.setDeal((String) tutorials.get("deal_bas_r"));
+                dto.setBkpr((String) tutorials.get("bkpr"));
+                System.out.println(dto.toString());
+                list.add(dto);
+            }
+
+            in.close();
+            ///없으면 insert, 있으면 update로 바꿔야함!
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (org.json.simple.parser.ParseException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
 
     private static String getDate(String year, int month, int day) {
         String strMonth, strDay;
