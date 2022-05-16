@@ -2,10 +2,9 @@ package controller;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import persistence.dto.DTO;
-import persistence.dto.ExchangeDTO;
 import persistence.dto.SearchRequestDTO;
+import persistence.dto.SearchResponseDTO;
 import readAPI.ReadData;
-import service.ExchangeService;
 import service.SearchService;
 
 import java.io.DataInputStream;
@@ -14,14 +13,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class SearchController {
-    private SqlSessionFactory sqlSessionFactory;
-    private ArrayList<DTO> nowData;
     private DataInputStream dis;
     private DataOutputStream dos;
     private SearchService searchService;
 
     public SearchController(SqlSessionFactory sqlSessionFactory,DataInputStream dis,DataOutputStream dos){
-        nowData = ReadData.dayTimeRead(sqlSessionFactory);
         searchService = new SearchService(sqlSessionFactory);
         this.dis = dis;
         this.dos = dos;
@@ -41,13 +37,10 @@ public class SearchController {
 
     }
 
-
     public void searchFromDate(byte[] data) throws IOException, ClassNotFoundException {
         SearchRequestDTO searchRequestDTO = (SearchRequestDTO) Protocol.convertBytesToObject(data);
-
-
-        DTO result = searchService.searchFromDate(searchRequestDTO);
-
+        SearchResponseDTO result = searchService.searchFromDate(searchRequestDTO);
         dos.write(Protocol.convertObjectToBytes(1,1,result));
     }
+
 }

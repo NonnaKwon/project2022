@@ -17,8 +17,8 @@ import java.util.concurrent.TimeUnit;
 public class Main {
         public static void main(String[] args) {
             SqlSessionFactory sqlSessionFactory = MyBatisConnectionFactory.getSqlSessionFactory();
-            DAO dao = new DAO(sqlSessionFactory,0);
-            DTO dto = dao.selectOneDto("20220516");
+            DAO dao = new DAO(sqlSessionFactory,21);
+            SearchResponseDTO dto = dao.selectOneDto("20220516");
             System.out.println(dto.toString());
 //            try {
 //                ServerSocket s_socket = new ServerSocket(8888);

@@ -2,6 +2,7 @@ package persistence.mapper;
 
 import org.apache.ibatis.annotations.*;
 import persistence.dto.DTO;
+import persistence.dto.SearchResponseDTO;
 
 import java.util.ArrayList;
 public interface BahrainMapper extends Mapper {
@@ -21,6 +22,17 @@ public interface BahrainMapper extends Mapper {
 
     @Select("SELECT bkpr FROM "+tableName+" WHERE date = #{date}")
     public String selectOneBkpr(String date);
+
+    @Select("SELECT * FROM "+tableName+" WHERE date = #{date}")
+    @Results(id="set", value = {
+            @Result(property = "unit",column = "unit"),
+            @Result(property = "ttb",column = "ttb"),
+            @Result(property = "tts",column = "tts"),
+            @Result(property = "deal",column = "deal"),
+            @Result(property = "bkpr",column = "bkpr")
+    })
+    public SearchResponseDTO selectOneDto(@Param("date") String date);
+
 
     @Select("SELECT date,bkpr FROM "+tableName+" WHERE date BETWEEN #{startDate} AND #{endDate}")
     public ArrayList<String> selectBkpr(@Param("startDate") String startDate, @Param("endDate") String endDate);

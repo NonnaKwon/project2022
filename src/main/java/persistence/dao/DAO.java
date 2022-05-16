@@ -3,6 +3,7 @@ package persistence.dao;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import persistence.dto.DTO;
+import persistence.dto.SearchResponseDTO;
 import persistence.mapper.Mapper;
 import persistence.mapper.MapperList;
 
@@ -33,14 +34,12 @@ public class DAO {
         return list;
     }
 
-    public DTO selectOneDto(String date){
-        DTO result = null;
-        ArrayList<DTO> resultList = null;
+    public SearchResponseDTO selectOneDto(String date){
+        SearchResponseDTO result = null;
         SqlSession session = sqlSessionFactory.openSession();
         Mapper mapper = (Mapper) session.getMapper(MapperList.mapperList[country]);
         try{
-            resultList = mapper.selectOneDto(date);
-            result = resultList.get(0);
+            result = mapper.selectOneDto(date);
             session.commit();
         }catch(Exception e){
             e.getStackTrace();

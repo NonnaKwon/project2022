@@ -38,6 +38,7 @@ public class Controller {
 
                 ExchangeController exchange = new ExchangeController(sqlSessionFactory,dis,dos);
                 GraphController graph = new GraphController(sqlSessionFactory,dis,dos);
+                SearchController search = new SearchController(sqlSessionFactory,dis,dos);
 
                 byte[] data = dis.readNBytes(size);
 
@@ -49,6 +50,7 @@ public class Controller {
                         graph.run(code,data);
                         continue;
                     case 3 :
+                        search.run(code,data);
                         continue;
                 }
 
