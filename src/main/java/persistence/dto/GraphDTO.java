@@ -12,5 +12,5 @@ import java.io.Serializable;
 public class GraphDTO implements Serializable {
     private String startDate;
     private String endDate;
-    private String Forex;
+    private String forex;
 }

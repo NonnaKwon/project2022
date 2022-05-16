@@ -33,6 +33,24 @@ public class DAO {
         return list;
     }
 
+    public DTO selectOneDto(String date){
+        DTO result = null;
+        ArrayList<DTO> resultList = null;
+        SqlSession session = sqlSessionFactory.openSession();
+        Mapper mapper = (Mapper) session.getMapper(MapperList.mapperList[country]);
+        try{
+            resultList = mapper.selectOneDto(date);
+            result = resultList.get(0);
+            session.commit();
+        }catch(Exception e){
+            e.getStackTrace();
+            session.rollback();
+        }finally {
+            session.close();
+        }
+        return result;
+    }
+
     public String selectOneBkpr(String date){
         String result = null;
         SqlSession session = sqlSessionFactory.openSession();

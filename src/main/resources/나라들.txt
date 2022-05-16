@@ -1,0 +1,25 @@
+date / unit / ttb / tts / deal : 매매기준(환율) / bkpr : 장부가격(환전계산할때씀)
+
+이 순서대로 0~21 까지 인덱스
+0. 아랍		    arab		AED
+1. 호주		    australia	AUD
+2.바레인		    bahrain		BHD
+3.캐나다		    canada		CAD
+4.스위스		    suisse		CHF
+5. 위안 	 	    yuan		CNH
+6. 덴마크	    denmark		DKK
+7.유로		    euro		EUR
+8.영국		    uk		    GBP
+9.홍콩		    hongkong	HKD
+10.인도네시아	    indonesia	IDR(100)
+11.일본   	    japan		JPY(100)
+12.한국 		    korea		KRW
+13.쿠웨이트	    kuwait		KWD
+14.말레이시아	    malaysia	MYR
+15.노르웨이     	norway		NOK
+16. 뉴질랜드	    newzealand	NZD
+17. 사우디	    saudi		SAR
+18. 스웨덴	    sweden	    SEK
+19. 싱가포르	    singapore	SGD
+20.태국		    thailand	THB
+21. 미국 	    america		USD

@@ -1,6 +1,7 @@
 import controller.Controller;
 import controller.MyBatisConnectionFactory;
 import org.apache.ibatis.session.SqlSessionFactory;
+import persistence.dao.DAO;
 import persistence.dto.*;
 import readAPI.ReadData;
 
@@ -16,11 +17,9 @@ import java.util.concurrent.TimeUnit;
 public class Main {
         public static void main(String[] args) {
             SqlSessionFactory sqlSessionFactory = MyBatisConnectionFactory.getSqlSessionFactory();
-            ArrayList<DTO> list = ReadData.dayTimeRead(sqlSessionFactory);
-            for(int i=0;i<list.size();i++){
-                System.out.println(list.get(i).toString());
-            }
-
+            DAO dao = new DAO(sqlSessionFactory,0);
+            DTO dto = dao.selectOneDto("20220516");
+            System.out.println(dto.toString());
 //            try {
 //                ServerSocket s_socket = new ServerSocket(8888);
 //

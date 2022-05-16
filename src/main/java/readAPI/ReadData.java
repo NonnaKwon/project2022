@@ -7,6 +7,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import persistence.dao.*;
 import persistence.dto.*;
+import service.Country;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -24,12 +25,13 @@ public class ReadData {
     static SqlSessionFactory sqlSessionFactory;
     private static DAO[] daos;
 
-    private static String authKey = "hV5ckkLjhPQvfzPw5eZOyVUM7acbHBFp";
+    //private static String authKey = "hV5ckkLjhPQvfzPw5eZOyVUM7acbHBFp"; //코드1
+    private static String authKey = "AkkYyhYUysxtNQABF1j9pfh7wrjT5Pc6"; //코드2
     private static String dataType = "AP01";
     private static String searchDate;
     private static String apiURL;
 
-    private static final int COUNTRY_COUNT = 31;
+    private static final int COUNTRY_COUNT = 23;
     private static final int DAY_MAX = 31;
     private static final int MONTH_MAX = 12;
 
@@ -57,15 +59,26 @@ public class ReadData {
                         a = (JSONArray) parser.parse(inputLine);
                     }
 
+
                     for (Object o : a) {
                         JSONObject tutorials = (JSONObject) o;
-                        String key = (String) tutorials.get("cur_unit");
+                        if(((String)tutorials.get("result")).equals("4")){
+                            System.out.println("인증횟수 제한");
+                            return;
+                        }
                         dto.setDate(searchDate);
                         dto.setUnit((String) tutorials.get("cur_unit"));
                         dto.setTtb((String) tutorials.get("ttb"));
                         dto.setTts((String) tutorials.get("tts"));
                         dto.setDeal((String) tutorials.get("deal_bas_r"));
                         dto.setBkpr((String) tutorials.get("bkpr"));
+
+                        int countryCode = Country.getCode((String) tutorials.get("cur_unit"));
+                        //System.out.println(dto.getUnit() + "( "+(String) tutorials.get("cur_nm")+" )"+", "+countryCode);
+
+                        if(countryCode != -1) {
+                            daos[countryCode].insert(dto);
+                        }
                     }
                     in.close();
                 } catch (FileNotFoundException e) {
@@ -75,7 +88,8 @@ public class ReadData {
                 } catch (org.json.simple.parser.ParseException e) {
                     e.printStackTrace();
                 } catch (NullPointerException e) {
-                    e.printStackTrace();
+                    System.out.println("없는날짜");
+                    //e.printStackTrace();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -95,7 +109,7 @@ public class ReadData {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         Calendar calendar = Calendar.getInstance();
         String strToday = sdf.format(calendar.getTime());
-        searchDate = "20220513";
+        searchDate = strToday;
 
         apiURL = "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=" + authKey + "&searchdate=" + searchDate + "&data=" + dataType;
         try {
@@ -117,12 +131,10 @@ public class ReadData {
                 dto.setTts((String) tutorials.get("tts"));
                 dto.setDeal((String) tutorials.get("deal_bas_r"));
                 dto.setBkpr((String) tutorials.get("bkpr"));
-                System.out.println(dto.toString());
                 list.add(dto);
-            }
 
+            }
             in.close();
-            ///없으면 insert, 있으면 update로 바꿔야함!
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -173,7 +185,6 @@ public class ReadData {
                 dto.setTts((String) tutorials.get("tts"));
                 dto.setDeal((String) tutorials.get("deal_bas_r"));
                 dto.setBkpr((String) tutorials.get("bkpr"));
-                System.out.println(dto.toString());
                 list.add(dto);
             }
 

@@ -19,6 +19,17 @@ public interface AmericaMapper extends Mapper{
     })
     public ArrayList<DTO> selectAll();
 
+    @Select("SELECT * FROM "+tableName+" WHERE date = #{date}")
+    @Results(id="set", value = {
+            @Result(property = "date",column = "date"),
+            @Result(property = "unit",column = "unit"),
+            @Result(property = "ttb",column = "ttb"),
+            @Result(property = "tts",column = "tts"),
+            @Result(property = "deal",column = "deal"),
+            @Result(property = "bkpr",column = "bkpr")
+    })
+    public ArrayList<DTO> selectOneDto(@Param("date") String date);
+
     @Select("SELECT bkpr FROM "+tableName+" WHERE date = #{date}")
     public String selectOneBkpr(String date);
 

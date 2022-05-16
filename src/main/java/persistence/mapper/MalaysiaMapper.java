@@ -7,7 +7,6 @@ import java.util.ArrayList;
 public interface MalaysiaMapper extends Mapper {
     String tableName = "malaysia";
 
-
     @Select("SELECT * FROM "+tableName)
     @Results(id="allset", value = {
             @Result(property = "date",column = "date"),
