@@ -2,7 +2,7 @@ package persistence.mapper;
 
 import org.apache.ibatis.annotations.*;
 import persistence.dto.DTO;
-import persistence.dto.SearchResponseDTO;
+import persistence.dto.ResSearchDTO;
 
 import java.util.ArrayList;
 
@@ -28,7 +28,7 @@ public interface AmericaMapper extends Mapper{
             @Result(property = "deal",column = "deal"),
             @Result(property = "bkpr",column = "bkpr")
     })
-    public SearchResponseDTO selectOneDto(@Param("date") String date);
+    public ResSearchDTO selectOneDto(@Param("date") String date);
 
     @Select("SELECT bkpr FROM "+tableName+" WHERE date = #{date}")
     public String selectOneBkpr(String date);

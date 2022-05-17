@@ -2,8 +2,8 @@ package service;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import persistence.dao.DAO;
-import persistence.dto.CalculationRequestDTO;
-import persistence.dto.CalculationResponseDTO;
+import persistence.dto.ReqCalculationDTO;
+import persistence.dto.ResCalculationDTO;
 import persistence.dto.DTO;
 import readAPI.ReadData;
 
@@ -22,7 +22,7 @@ public class ExchangeService {
         nowData = ReadData.dayTimeRead(sqlSessionFactory);
     }
 
-    public CalculationResponseDTO otherToKoreaService(CalculationRequestDTO requestDTO)  {
+    public ResCalculationDTO otherToKoreaService(ReqCalculationDTO requestDTO)  {
         int countryCode = Country.getCode(requestDTO.getCurrencytmp());
         DTO dto = nowData.get(countryCode);
         String option = requestDTO.getExchangeOption();
@@ -42,13 +42,13 @@ public class ExchangeService {
             return null;
         }
 
-        CalculationResponseDTO result = new CalculationResponseDTO();
+        ResCalculationDTO result = new ResCalculationDTO();
         result.setResultExchange(amount * calNum);
 
         return result;
     }
 
-    public CalculationResponseDTO koreaToOtherService(CalculationRequestDTO requestDTO) {
+    public ResCalculationDTO koreaToOtherService(ReqCalculationDTO requestDTO) {
         int countryCode = Country.getCode(requestDTO.getCurrencytmp());
         DTO dto = nowData.get(countryCode);
         String option = requestDTO.getExchangeOption();
@@ -68,7 +68,7 @@ public class ExchangeService {
             return null;
         }
 
-        CalculationResponseDTO result = new CalculationResponseDTO();
+        ResCalculationDTO result = new ResCalculationDTO();
         result.setResultExchange(amount / calNum);
 
         return result;

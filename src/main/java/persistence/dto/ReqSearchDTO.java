@@ -5,9 +5,9 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Setter
-@ToString
 @Getter
-public class AlertResponseDTO {
-    private boolean reach;
-    private int num;
+@ToString
+public class ReqSearchDTO {
+    private String dateInput;
+    private String forex;
 }

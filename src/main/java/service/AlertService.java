@@ -2,8 +2,8 @@ package service;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import persistence.dao.DAO;
-import persistence.dto.AlertRequestDTO;
-import persistence.dto.AlertResponseDTO;
+import persistence.dto.ReqAlertDTO;
+import persistence.dto.ResAlertDTO;
 import persistence.dto.DTO;
 import readAPI.ReadData;
 
@@ -22,8 +22,8 @@ public class AlertService {
         nowData = ReadData.dayTimeRead(sqlSessionFactory);
     }
 
-    public AlertResponseDTO alertAmountService(AlertRequestDTO requestDTO){
-        AlertResponseDTO result = new AlertResponseDTO();
+    public ResAlertDTO alertAmountService(ReqAlertDTO requestDTO){
+        ResAlertDTO result = new ResAlertDTO();
 
         return result;
     }

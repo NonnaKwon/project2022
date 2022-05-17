@@ -7,8 +7,10 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class CalculationRequestDTO {
+public class ReqCalculationDTO {
     private String currencytmp;
     private String exchangeOption;
     private long currentExchange;
+
+
 }

@@ -1,12 +1,9 @@
 package controller;
 
 import org.apache.ibatis.session.SqlSessionFactory;
-import persistence.dto.AlertRequestDTO;
-import persistence.dto.AlertResponseDTO;
-import persistence.dto.CalculationRequestDTO;
-import persistence.dto.CalculationResponseDTO;
+import persistence.dto.ReqAlertDTO;
+import persistence.dto.ResAlertDTO;
 import service.AlertService;
-import service.ExchangeService;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -38,8 +35,8 @@ public class AlertController {
     }
 
     public void alertAmount(byte[] data) throws IOException, ClassNotFoundException {
-        AlertRequestDTO requestDTO = (AlertRequestDTO) Protocol.convertBytesToObject(data);
-        AlertResponseDTO result = alertService.alertAmountService(requestDTO);
+        ReqAlertDTO requestDTO = (ReqAlertDTO) Protocol.convertBytesToObject(data);
+        ResAlertDTO result = alertService.alertAmountService(requestDTO);
         dos.write(Protocol.convertObjectToBytes(1,1,result));
     }
 

@@ -3,9 +3,8 @@ package controller;
 import org.apache.ibatis.session.SqlSessionFactory;
 import persistence.dao.DAO;
 import persistence.dto.DTO;
-import persistence.dto.GraphDTO;
+import persistence.dto.ReqGraphDTO;
 import readAPI.ReadData;
-import service.Country;
 import service.GraphService;
 
 import java.io.DataInputStream;
@@ -40,7 +39,7 @@ public class GraphController {
     }
 
     public void bkprGraph(byte[] data) throws IOException, ClassNotFoundException {
-        GraphDTO graphRequestDTO = (GraphDTO) Protocol.convertBytesToObject(data);
+        ReqGraphDTO graphRequestDTO = (ReqGraphDTO) Protocol.convertBytesToObject(data);
         ArrayList<String> list = graphService.bkprGraphService(graphRequestDTO);
         dos.write(Protocol.convertObjectToBytes(2,1,list));
     }

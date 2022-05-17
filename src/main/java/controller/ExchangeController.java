@@ -1,17 +1,13 @@
 package controller;
 
 import org.apache.ibatis.session.SqlSessionFactory;
-import persistence.dto.CalculationRequestDTO;
-import persistence.dto.CalculationResponseDTO;
-import persistence.dto.DTO;
-import readAPI.ReadData;
-import service.Country;
+import persistence.dto.ReqCalculationDTO;
+import persistence.dto.ResCalculationDTO;
 import service.ExchangeService;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class ExchangeController {
     private DataInputStream dis;
@@ -40,14 +36,14 @@ public class ExchangeController {
     }
 
     public void otherToKoreaExchange(byte[] data) throws IOException, ClassNotFoundException {
-        CalculationRequestDTO requestDTO = (CalculationRequestDTO) Protocol.convertBytesToObject(data);
-        CalculationResponseDTO result = exchangeService.otherToKoreaService(requestDTO);
+        ReqCalculationDTO requestDTO = (ReqCalculationDTO) Protocol.convertBytesToObject(data);
+        ResCalculationDTO result = exchangeService.otherToKoreaService(requestDTO);
         dos.write(Protocol.convertObjectToBytes(1,1,result));
     }
 
     public void koreaToOtherExchange(byte[] data) throws IOException, ClassNotFoundException {
-        CalculationRequestDTO requestDTO = (CalculationRequestDTO) Protocol.convertBytesToObject(data);
-        CalculationResponseDTO result = exchangeService.koreaToOtherService(requestDTO);
+        ReqCalculationDTO requestDTO = (ReqCalculationDTO) Protocol.convertBytesToObject(data);
+        ResCalculationDTO result = exchangeService.koreaToOtherService(requestDTO);
         dos.write(Protocol.convertObjectToBytes(1,1,result));
     }
 

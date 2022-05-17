@@ -4,9 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@Getter
 @Setter
 @ToString
-public class CalculationResponseDTO {
-    private double resultExchange;
+@Getter
+public class ResAlertDTO {
+    private boolean reach;
+    private int num;
 }

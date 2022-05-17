@@ -7,7 +7,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class SearchResponseDTO {
+public class ResSearchDTO {
     private String unit;
     private String ttb;
     private String tts;

@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @ToString
-public class GraphDTO implements Serializable {
+public class ReqGraphDTO implements Serializable {
     private String startDate;
     private String endDate;
     private String forex;

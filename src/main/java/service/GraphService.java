@@ -1,11 +1,9 @@
 package service;
 
-import controller.Protocol;
 import org.apache.ibatis.session.SqlSessionFactory;
 import persistence.dao.DAO;
-import persistence.dto.GraphDTO;
+import persistence.dto.ReqGraphDTO;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class GraphService {
@@ -19,7 +17,7 @@ public class GraphService {
         }
     }
 
-    public ArrayList<String> bkprGraphService(GraphDTO graphDTO) {
+    public ArrayList<String> bkprGraphService(ReqGraphDTO graphDTO) {
         int countryCode = Country.getCode(graphDTO.getForex());
         ArrayList<String> list = daos[countryCode].selectBkpr(graphDTO.getStartDate(),graphDTO.getEndDate());
         return list;

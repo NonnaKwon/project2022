@@ -3,22 +3,14 @@ import controller.MyBatisConnectionFactory;
 import org.apache.ibatis.session.SqlSessionFactory;
 import persistence.dao.DAO;
 import persistence.dto.*;
-import readAPI.ReadData;
 
-import java.io.IOException;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 public class Main {
         public static void main(String[] args) {
             SqlSessionFactory sqlSessionFactory = MyBatisConnectionFactory.getSqlSessionFactory();
             DAO dao = new DAO(sqlSessionFactory,21);
-            SearchResponseDTO dto = dao.selectOneDto("20220516");
+            ResSearchDTO dto = dao.selectOneDto("20220516");
             System.out.println(dto.toString());
 //            try {
 //                ServerSocket s_socket = new ServerSocket(8888);

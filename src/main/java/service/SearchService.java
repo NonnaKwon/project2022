@@ -2,9 +2,8 @@ package service;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import persistence.dao.DAO;
-import persistence.dto.DTO;
-import persistence.dto.SearchRequestDTO;
-import persistence.dto.SearchResponseDTO;
+import persistence.dto.ReqSearchDTO;
+import persistence.dto.ResSearchDTO;
 
 public class SearchService {
     private SqlSessionFactory sqlSessionFactory;
@@ -17,9 +16,9 @@ public class SearchService {
         }
     }
 
-    public SearchResponseDTO searchFromDate(SearchRequestDTO searchRequestDTO) {
+    public ResSearchDTO searchFromDate(ReqSearchDTO searchRequestDTO) {
         int countryCode = Country.getCode(searchRequestDTO.getForex());
-        SearchResponseDTO result = daos[countryCode].selectOneDto(searchRequestDTO.getDateInput());
+        ResSearchDTO result = daos[countryCode].selectOneDto(searchRequestDTO.getDateInput());
         return result;
     }
 

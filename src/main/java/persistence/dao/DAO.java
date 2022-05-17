@@ -3,7 +3,7 @@ package persistence.dao;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import persistence.dto.DTO;
-import persistence.dto.SearchResponseDTO;
+import persistence.dto.ResSearchDTO;
 import persistence.mapper.Mapper;
 import persistence.mapper.MapperList;
 
@@ -34,8 +34,8 @@ public class DAO {
         return list;
     }
 
-    public SearchResponseDTO selectOneDto(String date){
-        SearchResponseDTO result = null;
+    public ResSearchDTO selectOneDto(String date){
+        ResSearchDTO result = null;
         SqlSession session = sqlSessionFactory.openSession();
         Mapper mapper = (Mapper) session.getMapper(MapperList.mapperList[country]);
         try{
