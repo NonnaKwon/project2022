@@ -27,7 +27,7 @@ public class ExchangeController {
                 otherToKoreaExchange(data);
                 break;
             case 2: // 한국돈 -> 외화
-                koreaToOtherExchange(data);
+                //koreaToOtherExchange(data);
                 break;
             default:
 

@@ -22,9 +22,9 @@ public class Country {
             return 8;
         }else if(unit.equals("HKD")){
             return 9;
-        }else if(unit.equals("IDR(100)")){
+        }else if(unit.equals("IDR")){
             return 10;
-        }else if(unit.equals("JPY(100)")){
+        }else if(unit.equals("JPY")){
             return 11;
         }else if(unit.equals("KRW")){
             return 12;
