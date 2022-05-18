@@ -3,6 +3,7 @@ package service;
 import org.apache.ibatis.session.SqlSessionFactory;
 import persistence.dao.DAO;
 import persistence.dto.ReqGraphDTO;
+import persistence.dto.ResGraphDTO;
 
 import java.util.ArrayList;
 
@@ -17,9 +18,11 @@ public class GraphService {
         }
     }
 
-    public ArrayList<String> bkprGraphService(ReqGraphDTO graphDTO) {
+    public ResGraphDTO bkprGraphService(ReqGraphDTO graphDTO) {
+        ResGraphDTO result = new ResGraphDTO();
         int countryCode = Country.getCode(graphDTO.getForex());
         ArrayList<String> list = daos[countryCode].selectBkpr(graphDTO.getStartDate(),graphDTO.getEndDate());
-        return list;
+        result.setList(list);
+        return result;
     }
 }

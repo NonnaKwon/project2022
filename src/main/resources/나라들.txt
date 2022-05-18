@@ -21,5 +21,5 @@ date / unit / ttb / tts / deal : 매매기준(환율) / bkpr : 장부가격(환�
 17. 사우디	    saudi		SAR
 18. 스웨덴	    sweden	    SEK
 19. 싱가포르	    singapore	SGD
-20.태국		    thailand	THB
+20. 태국		    thailand	THB
 21. 미국 	    america		USD
