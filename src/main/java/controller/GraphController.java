@@ -16,34 +16,36 @@ import java.util.ArrayList;
 
 public class GraphController {
     private ArrayList<DTO> nowData;
-    private DataInputStream dis;
-    private DataOutputStream dos;
+
     private DAO[] daos = new DAO[31];
     private GraphService graphService;
 
-    GraphController(SqlSessionFactory sqlSessionFactory, DataInputStream dis, DataOutputStream dos){
-        nowData = ReadData.dayTimeRead(sqlSessionFactory);
-        this.dis = dis;
-        this.dos = dos;
-        graphService = new GraphService(sqlSessionFactory);
+    GraphController(){
+        nowData = ReadData.dayTimeRead(MyBatisConnectionFactory.getSqlSessionFactory());
+        graphService = new GraphService(MyBatisConnectionFactory.getSqlSessionFactory());
     }
 
     public void run(int code,byte[] data) throws IOException, ClassNotFoundException {
         switch (code){
-            case 1:
-                bkprGraph(data);
+            case Protocol.CODE_REQ_GRAPH_MONTH:
+                bkprGraphMonth(data);
                 break;
-            case 2:
+            case Protocol.CODE_REQ_GRAPH_YEAR:
+                bkprGraphYear(data);
                 break;
             default:
         }
     }
 
-    public void bkprGraph(byte[] data) throws IOException, ClassNotFoundException {
-        ReqGraphDTO graphRequestDTO = (ReqGraphDTO) Protocol.convertBytesToObject(data);
-
-        ResGraphDTO result = graphService.bkprGraphService(graphRequestDTO);
-        dos.write(Protocol.convertObjectToBytes(2,1,result));
+    public void bkprGraphMonth(byte[] data) throws IOException, ClassNotFoundException {
+        ReqGraphDTO reqGraphDTO = (ReqGraphDTO) Protocol.convertBytesToObject(data);
+        ResGraphDTO result = graphService.bkprGraphMonthService(reqGraphDTO);
+        Protocol.responseToClient(Protocol.TYPE_RES_GRAPH,Protocol.CODE_RES_GRAPH_MONTH,result);
+    }
+    public void bkprGraphYear(byte[] data) throws IOException, ClassNotFoundException {
+        ReqGraphDTO reqGraphDTO = (ReqGraphDTO) Protocol.convertBytesToObject(data);
+        ResGraphDTO result = graphService.bkprGraphYearService(reqGraphDTO);
+        Protocol.responseToClient(Protocol.TYPE_RES_GRAPH,Protocol.CODE_RES_GRAPH_YEAR,result);
     }
 
 

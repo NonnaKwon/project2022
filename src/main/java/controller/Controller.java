@@ -14,50 +14,25 @@ public class Controller {
     private DataInputStream dis;
     private DataOutputStream dos;
 
-    public Controller(Socket conn){
-        this.conn = conn;
-        sqlSessionFactory = MyBatisConnectionFactory.getSqlSessionFactory();
-    }
-
-    public void run(){
+    public Controller(Socket conn) {
         try {
-            dis = new DataInputStream(conn.getInputStream());
-            dos = new DataOutputStream((conn.getOutputStream()));
+            this.conn = conn;
+            sqlSessionFactory = MyBatisConnectionFactory.getSqlSessionFactory();
+            Protocol.setStream(conn);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void run(){
 
         while(true){
             try{
                 if(!conn.isConnected()) break;
-                byte[] typeAndCode = dis.readNBytes(2);
-                int type = typeAndCode[0];
-                int code = typeAndCode[1];
-                byte[] dataSize = dis.readNBytes(4);
-                int size = Protocol.byteToInt(dataSize);
-
-                ExchangeController exchange = new ExchangeController(sqlSessionFactory,dis,dos);
-                GraphController graph = new GraphController(sqlSessionFactory,dis,dos);
-                SearchController search = new SearchController(sqlSessionFactory,dis,dos);
-
-                byte[] data = dis.readNBytes(size);
-
-                switch (type){
-                    case 1 :
-                        exchange.run(code ,data);
-                        continue;
-                    case 2 :
-                        graph.run(code,data);
-                        continue;
-                    case 3 :
-                        search.run(code,data);
-                        continue;
-                }
-
-            }catch (SocketException e){
-                e.printStackTrace();
+                Protocol.receiveData();
             } catch (Exception e){
                 e.printStackTrace();
+                break;
             }
         }
     }

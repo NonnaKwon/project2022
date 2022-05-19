@@ -10,20 +10,18 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class AlertController {
-    private DataInputStream dis;
-    private DataOutputStream dos;
+
     private AlertService alertService;
 
-    public AlertController(SqlSessionFactory sqlSessionFactory, DataInputStream dis, DataOutputStream dos){
-        alertService = new AlertService(sqlSessionFactory);
-        this.dis = dis;
-        this.dos = dos;
+    public AlertController(){
+        alertService = new AlertService(MyBatisConnectionFactory.getSqlSessionFactory());
+
     }
 
 
     public void run(int code,byte[] data) throws IOException, ClassNotFoundException{
         switch (code){
-            case 1:
+            case Protocol.CODE_REQ_ALERT_:
                 alertAmount(data);
                 break;
             case 2:
@@ -37,7 +35,8 @@ public class AlertController {
     public void alertAmount(byte[] data) throws IOException, ClassNotFoundException {
         ReqAlertDTO requestDTO = (ReqAlertDTO) Protocol.convertBytesToObject(data);
         ResAlertDTO result = alertService.alertAmountService(requestDTO);
-        dos.write(Protocol.convertObjectToBytes(1,1,result));
+        Protocol.responseToClient(Protocol.TYPE_RES_ALERT,Protocol.CODE_RES_ALERT_,result);
+
     }
 
 

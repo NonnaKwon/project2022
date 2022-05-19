@@ -1,11 +1,95 @@
 package controller;
 
 import java.io.*;
+import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 public class Protocol {
+    private static DataOutputStream dos;
+    private static DataInputStream dis;
     private static byte[] paket;
+
+    public static void setStream(Socket conn) throws IOException {
+        dos = new DataOutputStream(conn.getOutputStream());
+        dis = new DataInputStream(conn.getInputStream());
+    }
+
+    //type
+    public static final int TYPE_REQ_CALCULATE = 1;
+    public static final int TYPE_REQ_GRAPH = 2;
+    public static final int TYPE_REQ_ALERT = 3;
+    public static final int TYPE_REQ_SEARCH = 4;
+
+    public static final int TYPE_RES_CALCULATE = 11;
+    public static final int TYPE_RES_GRAPH = 22;
+    public static final int TYPE_RES_ALERT = 33;
+    public static final int TYPE_RES_SEARCH = 44;
+
+    //code
+    //type -> 1
+    public static final int CODE_REQ_CALCUALTE = 1;
+    //type -> 2
+    public static final int CODE_REQ_GRAPH_MONTH = 1;
+    public static final int CODE_REQ_GRAPH_YEAR = 2;
+    //type -> 3
+    public static final int CODE_REQ_ALERT_ = 0;
+    //type -> 4
+    public static final int CODE_REQ_SEARCH = 1;
+
+
+    //type -> 11
+    public static final int CODE_RES_CALCUALTE = 1;
+    //type -> 22
+    public static final int CODE_RES_GRAPH_MONTH = 1;
+    public static final int CODE_RES_GRAPH_YEAR = 2;
+    //type -> 33
+    public static final int CODE_RES_ALERT_ = 0;
+    //type -> 44
+    public static final int CODE_RES_SEARCH = 1;
+
+
+    public static void responseToClient(int type, int code, Object obj) throws IOException {
+        paket = convertObjectToBytes(type,code,obj);
+        dos.write(paket);
+    }
+
+    public static void receiveData() throws IOException, ClassNotFoundException {
+
+        byte[] typeAndCode = new byte[0];
+        typeAndCode = dis.readNBytes(2);
+        int type = typeAndCode[0];
+        int code = typeAndCode[1];
+        byte[] byteSize = dis.readNBytes(4);
+        int size = Protocol.byteToInt(byteSize);
+        System.out.println("size : " + size);
+
+        byte[] data = dis.readNBytes(size);
+
+        CalculateController calculateController = new CalculateController();
+        GraphController graphController = new GraphController();
+        AlertController alertController = new AlertController();
+        SearchController searchController = new SearchController();
+        switch (type){
+            case TYPE_REQ_CALCULATE :
+                calculateController.run(code,data);
+                break;
+            case TYPE_REQ_GRAPH:
+                graphController.run(code,data);
+                break;
+            case TYPE_REQ_ALERT:
+                alertController.run(code,data);
+                break;
+            case TYPE_REQ_SEARCH:
+                searchController.run(code,data);
+                break;
+        }
+
+
+
+    }
+
+
 
     public static byte[] convertObjectToBytes(int type, int code, Object obj) throws IOException {
         byte[] objByteArr;
