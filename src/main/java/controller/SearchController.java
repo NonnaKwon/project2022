@@ -18,13 +18,12 @@ public class SearchController {
 
     }
 
-    //1~n 나라 코드 정하기
     public void run(int code,byte[] data) throws IOException, ClassNotFoundException{
         switch (code){
             case Protocol.CODE_REQ_SEARCH: // 날짜로 환율검색
                 searchFromDate(data);
                 break;
-            case 2: // 외화 -> 한국돈
+            case 2:
                 break;
             default:
 

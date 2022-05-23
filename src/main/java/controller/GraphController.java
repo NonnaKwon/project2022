@@ -42,6 +42,7 @@ public class GraphController {
         ResGraphDTO result = graphService.bkprGraphMonthService(reqGraphDTO);
         Protocol.responseToClient(Protocol.TYPE_RES_GRAPH,Protocol.CODE_RES_GRAPH_MONTH,result);
     }
+
     public void bkprGraphYear(byte[] data) throws IOException, ClassNotFoundException {
         ReqGraphDTO reqGraphDTO = (ReqGraphDTO) Protocol.convertBytesToObject(data);
         ResGraphDTO result = graphService.bkprGraphYearService(reqGraphDTO);

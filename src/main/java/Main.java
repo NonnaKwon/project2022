@@ -3,31 +3,47 @@ import controller.MyBatisConnectionFactory;
 import org.apache.ibatis.session.SqlSessionFactory;
 import persistence.dao.DAO;
 import persistence.dto.*;
+import readAPI.ReadData;
+import service.CalculateService;
+import service.GraphService;
+import service.SearchService;
 
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
         public static void main(String[] args) {
-            SqlSessionFactory sqlSessionFactory = MyBatisConnectionFactory.getSqlSessionFactory();
-            DAO dao = new DAO(sqlSessionFactory,21);
-            ResSearchDTO dto = dao.selectOneDto("20220516");
-            System.out.println(dto.toString());
-//            try {
-//                ServerSocket s_socket = new ServerSocket(8888);
+//            SqlSessionFactory sqlSessionFactory = MyBatisConnectionFactory.getSqlSessionFactory();
+//            ReqGraphDTO request = new ReqGraphDTO();
+//            GraphService service = new GraphService(sqlSessionFactory);
 //
-//                BlockingQueue<Runnable> blockingQueue = new ArrayBlockingQueue<>(10);
-//                ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5,20,1, TimeUnit.HOURS,blockingQueue);
-//                Socket conn;
-//                System.out.println("서버 시작");
-//
-//                while(true){
-//                    conn = s_socket.accept();
-//                    threadPoolExecutor.execute(new Task(conn) {
-//                    });
-//                }
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
+//            request.setStartDate("20220501");
+//            request.setEndDate("20220523");
+//            request.setForex("USD");
+//            ResGraphDTO result = service.bkprGraphMonthService(request);
+//            System.out.println(result.toString());
+
+            try {
+                ServerSocket s_socket = new ServerSocket(8888);
+
+                BlockingQueue<Runnable> blockingQueue = new ArrayBlockingQueue<>(10);
+                ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5,20,1, TimeUnit.HOURS,blockingQueue);
+                Socket conn;
+                System.out.println("서버 시작");
+
+                while(true){
+                    conn = s_socket.accept();
+                    threadPoolExecutor.execute(new Task(conn) {
+                    });
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         static class Task implements Runnable{

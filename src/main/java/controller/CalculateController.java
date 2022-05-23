@@ -1,19 +1,16 @@
 package controller;
 
-import org.apache.ibatis.session.SqlSessionFactory;
 import persistence.dto.ReqCalculationDTO;
 import persistence.dto.ResCalculationDTO;
-import service.ExchangeService;
+import service.CalculateService;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class CalculateController {
-    private ExchangeService exchangeService;
+    private CalculateService calculateService;
 
     public CalculateController(){
-        exchangeService = new ExchangeService(MyBatisConnectionFactory.getSqlSessionFactory());
+        calculateService = new CalculateService(MyBatisConnectionFactory.getSqlSessionFactory());
 
     }
 
@@ -37,7 +34,7 @@ public class CalculateController {
         ReqCalculationDTO requestDTO = null;
         try {
             requestDTO = (ReqCalculationDTO) Protocol.convertBytesToObject(data);
-            ResCalculationDTO result = exchangeService.otherToKoreaService(requestDTO);
+            ResCalculationDTO result = calculateService.otherToKoreaService(requestDTO);
             Protocol.responseToClient(1,1,result);
         } catch (IOException e) {
             e.printStackTrace();
@@ -49,7 +46,7 @@ public class CalculateController {
     public void koreaToOtherExchange(byte[] data)  {
         try{
             ReqCalculationDTO requestDTO = (ReqCalculationDTO) Protocol.convertBytesToObject(data);
-            ResCalculationDTO result = exchangeService.koreaToOtherService(requestDTO);
+            ResCalculationDTO result = calculateService.koreaToOtherService(requestDTO);
             Protocol.responseToClient(Protocol.TYPE_RES_CALCULATE,Protocol.CODE_RES_CALCUALTE,result);
         } catch (IOException e) {
             e.printStackTrace();
@@ -57,9 +54,6 @@ public class CalculateController {
             e.printStackTrace();
         }
     }
-
-
-
 
 
 

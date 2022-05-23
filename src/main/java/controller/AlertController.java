@@ -10,12 +10,10 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class AlertController {
-
     private AlertService alertService;
 
     public AlertController(){
         alertService = new AlertService(MyBatisConnectionFactory.getSqlSessionFactory());
-
     }
 
 
@@ -38,6 +36,4 @@ public class AlertController {
         Protocol.responseToClient(Protocol.TYPE_RES_ALERT,Protocol.CODE_RES_ALERT_,result);
 
     }
-
-
 }

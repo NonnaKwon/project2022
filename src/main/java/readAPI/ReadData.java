@@ -48,6 +48,7 @@ public class ReadData {
         for (int month = 1; month <= MONTH_MAX; month++) {
             for (int day = 1; day <= DAY_MAX; day++) {
                 searchDate = getDate(year, month, day);
+                System.out.println(searchDate);
                 apiURL = "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=" + authKey + "&searchdate=" + searchDate + "&data=" + dataType;
                 try {
                     URL oracle = new URL(apiURL);
@@ -62,7 +63,7 @@ public class ReadData {
 
                     for (Object o : a) {
                         JSONObject tutorials = (JSONObject) o;
-                        if(((String)tutorials.get("result")).equals("4")){
+                        if(((long)tutorials.get("result")==4)){
                             System.out.println("인증횟수 제한");
                             return;
                         }
@@ -73,7 +74,7 @@ public class ReadData {
                         dto.setDeal((String) tutorials.get("deal_bas_r"));
                         dto.setBkpr((String) tutorials.get("bkpr"));
 
-                        int countryCode = Country.getCode((String) tutorials.get("cur_unit"));
+                        int countryCode = Country.getCodeOriginalVer((String) tutorials.get("cur_unit"));
                         //System.out.println(dto.getUnit() + "( "+(String) tutorials.get("cur_nm")+" )"+", "+countryCode);
 
                         if(countryCode != -1) {
@@ -98,19 +99,40 @@ public class ReadData {
     }
 
     public static ArrayList<DTO> dayTimeRead(SqlSessionFactory sqlSessionFactory) { //오늘꺼 받아오기
-        daos = new DAO[COUNTRY_COUNT];
-        for (int i = 0; i < daos.length; i++) {
-            daos[i] = new DAO(sqlSessionFactory, i);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        Calendar calendar = Calendar.getInstance();
+
+        String year = sdf.format(calendar.getTime());
+        sdf = new SimpleDateFormat("MM");
+        int m = Integer.parseInt(sdf.format(calendar.getTime()));
+        sdf = new SimpleDateFormat("dd");
+        int d = Integer.parseInt(sdf.format(calendar.getTime()));
+
+        sdf = new SimpleDateFormat("HH");
+        int hour = Integer.parseInt(sdf.format(calendar.getTime()));
+
+        if(hour < 10){ //오전 10시 전이면
+            d -= 1; //전날 데이터 불러오기
         }
 
+        ArrayList<DTO> list = dayRead(year,m,d); //데이터 불러오기
+        return list;
+    }
+
+    private static ArrayList<DTO> dayRead(String year,int m,int d){
+        if(d < 1){
+            d = 31;
+            m -= 1;
+        }else if(m < 1){
+            int y = Integer.parseInt(year);
+            m = 12;
+            y -= 1;
+            year = Integer.toString(y);
+        }
+
+        searchDate = getDate(year,m,d);
         ArrayList<DTO> list = new ArrayList<DTO>();
         JSONParser parser = new JSONParser();
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        Calendar calendar = Calendar.getInstance();
-        String strToday = sdf.format(calendar.getTime());
-        searchDate = strToday;
-
         apiURL = "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=" + authKey + "&searchdate=" + searchDate + "&data=" + dataType;
         try {
             URL oracle = new URL(apiURL);
@@ -120,21 +142,30 @@ public class ReadData {
             JSONArray a = null;
             while ((inputLine = in.readLine()) != null) {
                 a = (JSONArray) parser.parse(inputLine);
-                System.out.println(inputLine);
+                System.out.println("not null");
             }
-            for (Object o : a) {
-                DTO dto = new DTO();
-                JSONObject tutorials = (JSONObject) o;
-                dto.setDate(searchDate);
-                dto.setUnit((String) tutorials.get("cur_unit"));
-                dto.setTtb((String) tutorials.get("ttb"));
-                dto.setTts((String) tutorials.get("tts"));
-                dto.setDeal((String) tutorials.get("deal_bas_r"));
-                dto.setBkpr((String) tutorials.get("bkpr"));
-                list.add(dto);
-
+            if(a == null){ //만약 그 날짜에 데이터가 없으면
+                System.out.println("null");
+                d -= 1;  //전날 데이터 불러오기
+                return dayRead(year,m,d);
+            }else{
+                for (Object o : a) {
+                    DTO dto = new DTO();
+                    JSONObject tutorials = (JSONObject) o;
+                    dto.setDate(searchDate);
+                    dto.setUnit((String) tutorials.get("cur_unit"));
+                    dto.setTtb((String) tutorials.get("ttb"));
+                    dto.setTts((String) tutorials.get("tts"));
+                    dto.setDeal((String) tutorials.get("deal_bas_r"));
+                    dto.setBkpr((String) tutorials.get("bkpr"));
+                    if(dto.getUnit().equals("BND")){
+                        continue;
+                    }else{
+                        list.add(dto);
+                    }
+                }
+                in.close();
             }
-            in.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -149,62 +180,6 @@ public class ReadData {
 
         return list;
     }
-
-    public static ArrayList<DTO> dayTimeRead() { //오늘꺼 받아오기
-        sqlSessionFactory = MyBatisConnectionFactory.getSqlSessionFactory();
-        daos = new DAO[COUNTRY_COUNT];
-        for (int i = 0; i < daos.length; i++) {
-            daos[i] = new DAO(sqlSessionFactory, i);
-        }
-
-        ArrayList<DTO> list = new ArrayList<DTO>();
-        JSONParser parser = new JSONParser();
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        Calendar calendar = Calendar.getInstance();
-        String strToday = sdf.format(calendar.getTime());
-        searchDate = strToday;
-
-        apiURL = "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=" + authKey + "&searchdate=" + searchDate + "&data=" + dataType;
-        try {
-            URL oracle = new URL(apiURL);
-            URLConnection yc = oracle.openConnection();
-            BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
-            String inputLine;
-            JSONArray a = null;
-            while ((inputLine = in.readLine()) != null) {
-                a = (JSONArray) parser.parse(inputLine);
-                System.out.println(inputLine);
-            }
-            for (Object o : a) {
-                DTO dto = new DTO();
-                JSONObject tutorials = (JSONObject) o;
-                dto.setDate(searchDate);
-                dto.setUnit((String) tutorials.get("cur_unit"));
-                dto.setTtb((String) tutorials.get("ttb"));
-                dto.setTts((String) tutorials.get("tts"));
-                dto.setDeal((String) tutorials.get("deal_bas_r"));
-                dto.setBkpr((String) tutorials.get("bkpr"));
-                list.add(dto);
-            }
-
-            in.close();
-            ///없으면 insert, 있으면 update로 바꿔야함!
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (org.json.simple.parser.ParseException e) {
-            e.printStackTrace();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return list;
-    }
-
 
     private static String getDate(String year, int month, int day) {
         String strMonth, strDay;

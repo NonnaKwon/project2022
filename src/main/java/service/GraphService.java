@@ -19,7 +19,6 @@ public class GraphService {
     }
 
 
-    //달, 년 이거 설명 듣고 적절하게 바꾸기
     public ResGraphDTO bkprGraphMonthService(ReqGraphDTO graphDTO) {
         ResGraphDTO result = new ResGraphDTO();
         int countryCode = Country.getCode(graphDTO.getForex());

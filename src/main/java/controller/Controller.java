@@ -25,7 +25,6 @@ public class Controller {
     }
 
     public void run(){
-
         while(true){
             try{
                 if(!conn.isConnected()) break;
