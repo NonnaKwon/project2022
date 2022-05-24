@@ -142,10 +142,8 @@ public class ReadData {
             JSONArray a = null;
             while ((inputLine = in.readLine()) != null) {
                 a = (JSONArray) parser.parse(inputLine);
-                System.out.println("not null");
             }
             if(a == null){ //만약 그 날짜에 데이터가 없으면
-                System.out.println("null");
                 d -= 1;  //전날 데이터 불러오기
                 return dayRead(year,m,d);
             }else{
