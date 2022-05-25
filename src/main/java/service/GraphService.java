@@ -19,7 +19,7 @@ public class GraphService {
     }
 
 
-    public ResGraphDTO bkprGraphMonthService(ReqGraphDTO graphDTO) {
+    public ResGraphDTO bkprService(ReqGraphDTO graphDTO) {
         ResGraphDTO result = new ResGraphDTO();
         int countryCode = Country.getCode(graphDTO.getForex());
         ArrayList<String> list = daos[countryCode].selectBkpr(graphDTO.getStartDate(),graphDTO.getEndDate());
@@ -27,12 +27,35 @@ public class GraphService {
         return result;
     }
 
-    public ResGraphDTO bkprGraphYearService(ReqGraphDTO graphDTO) {
+    public ResGraphDTO bkprYearService(ReqGraphDTO graphDTO) {
+        ArrayList<String> list = new ArrayList<>();
         ResGraphDTO result = new ResGraphDTO();
         int countryCode = Country.getCode(graphDTO.getForex());
-        ArrayList<String> list = daos[countryCode].selectBkpr(graphDTO.getStartDate(),graphDTO.getEndDate());
+        ArrayList<String> data = daos[countryCode].selectBkpr(graphDTO.getStartDate(),graphDTO.getEndDate());
+        int divNum = data.size() / 12;
+
+        String tmp;
+        double sum = 0;
+        for(int i=0;i<11;i++){
+            sum = 0;
+            for(int j=divNum*i ; j< (divNum*i + divNum) ; j++){
+                tmp = (data.get(j)).replace(",","");
+                sum += Double.parseDouble(tmp);
+            }
+            list.add(Double.toString(sum/divNum));
+        }
+
+        //마지막
+        sum = 0;
+        for(int i=divNum*11 ; i<data.size() ; i++){
+            tmp = (data.get(i)).replace(",","");
+            sum += Double.parseDouble(tmp);
+        }
+        list.add(Double.toString(sum/divNum));
+
         result.setList(list);
         return result;
     }
+
 
 }

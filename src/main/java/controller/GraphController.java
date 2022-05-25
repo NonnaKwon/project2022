@@ -28,25 +28,35 @@ public class GraphController {
     public void run(int code,byte[] data) throws IOException, ClassNotFoundException {
         switch (code){
             case Protocol.CODE_REQ_GRAPH_MONTH:
-                bkprGraphMonth(data);
+                bkprGraphMonth(data); //한달
                 break;
             case Protocol.CODE_REQ_GRAPH_YEAR:
-                bkprGraphYear(data);
+                bkprGraphYear(data); //일년
                 break;
+            case 1000: //삼개월
+                bkprGraphThreeMonth(data);
+                    break;
             default:
+
         }
     }
 
     public void bkprGraphMonth(byte[] data) throws IOException, ClassNotFoundException {
         ReqGraphDTO reqGraphDTO = (ReqGraphDTO) Protocol.convertBytesToObject(data);
-        ResGraphDTO result = graphService.bkprGraphMonthService(reqGraphDTO);
+        ResGraphDTO result = graphService.bkprService(reqGraphDTO);
         Protocol.responseToClient(Protocol.TYPE_RES_GRAPH,Protocol.CODE_RES_GRAPH_MONTH,result);
     }
 
     public void bkprGraphYear(byte[] data) throws IOException, ClassNotFoundException {
         ReqGraphDTO reqGraphDTO = (ReqGraphDTO) Protocol.convertBytesToObject(data);
-        ResGraphDTO result = graphService.bkprGraphYearService(reqGraphDTO);
+        ResGraphDTO result = graphService.bkprYearService(reqGraphDTO);
         Protocol.responseToClient(Protocol.TYPE_RES_GRAPH,Protocol.CODE_RES_GRAPH_YEAR,result);
+    }
+
+    public void bkprGraphThreeMonth(byte[] data) throws IOException, ClassNotFoundException {
+        ReqGraphDTO reqGraphDTO = (ReqGraphDTO) Protocol.convertBytesToObject(data);
+        ResGraphDTO result = graphService.bkprService(reqGraphDTO);
+        Protocol.responseToClient(Protocol.TYPE_RES_GRAPH,1000,result); //여기도 수정
     }
 
 

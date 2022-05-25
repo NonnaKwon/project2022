@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Getter
 @ToString
 public class ReqSearchDTO implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
     private String dateInput;
     private String forex;
 }
