@@ -32,10 +32,12 @@ public class Protocol {
     //type -> 2
     public static final int CODE_REQ_GRAPH_MONTH = 1;
     public static final int CODE_REQ_GRAPH_YEAR = 2;
+    public static final int CODE_REQ_GRAPH_3MONTH = 3;
     //type -> 3
     public static final int CODE_REQ_ALERT_ = 0;
     //type -> 4
     public static final int CODE_REQ_SEARCH = 1;
+
 
 
     //type -> 11
@@ -43,6 +45,7 @@ public class Protocol {
     //type -> 22
     public static final int CODE_RES_GRAPH_MONTH = 1;
     public static final int CODE_RES_GRAPH_YEAR = 2;
+    public static final int CODE_RES_GRAPH_3MONTH = 3;
     //type -> 33
     public static final int CODE_RES_ALERT_ = 0;
     //type -> 44

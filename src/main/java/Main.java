@@ -1,3 +1,4 @@
+import controller.AlertController;
 import controller.Controller;
 import controller.MyBatisConnectionFactory;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -22,7 +23,7 @@ public class Main {
         public static void main(String[] args) {
 
             try {
-                ServerSocket s_socket = new ServerSocket(8889);
+                ServerSocket s_socket = new ServerSocket(8888);
 
                 BlockingQueue<Runnable> blockingQueue = new ArrayBlockingQueue<>(10);
                 ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5,20,1, TimeUnit.HOURS,blockingQueue);
@@ -34,9 +35,13 @@ public class Main {
                     threadPoolExecutor.execute(new Task(conn) {
                     });
                 }
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+
+
         }
 
         static class Task implements Runnable{
@@ -52,5 +57,6 @@ public class Main {
                 controller.run();
             }
         }
+
 
 }

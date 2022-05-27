@@ -33,7 +33,7 @@ public class GraphController {
             case Protocol.CODE_REQ_GRAPH_YEAR:
                 bkprGraphYear(data); //일년
                 break;
-            case 1000: //삼개월
+            case Protocol.CODE_REQ_GRAPH_3MONTH: //삼개월
                 bkprGraphThreeMonth(data);
                     break;
             default:
@@ -56,7 +56,7 @@ public class GraphController {
     public void bkprGraphThreeMonth(byte[] data) throws IOException, ClassNotFoundException {
         ReqGraphDTO reqGraphDTO = (ReqGraphDTO) Protocol.convertBytesToObject(data);
         ResGraphDTO result = graphService.bkprService(reqGraphDTO);
-        Protocol.responseToClient(Protocol.TYPE_RES_GRAPH,1000,result); //여기도 수정
+        Protocol.responseToClient(Protocol.TYPE_RES_GRAPH,Protocol.CODE_RES_GRAPH_3MONTH,result); //여기도 수정
     }
 
 

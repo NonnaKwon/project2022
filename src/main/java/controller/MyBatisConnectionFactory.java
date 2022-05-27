@@ -4,6 +4,9 @@ import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import persistence.mapper.*;
+import persistence.mapper.analysis.HighLowsMapper;
+import persistence.mapper.analysis.MacdMapper;
+import persistence.mapper.analysis.RsiMapper;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -40,7 +43,10 @@ public class MyBatisConnectionFactory {
                     SuisseMapper.class,
                     SwedenMapper.class,
                     ThailandMapper.class,
-                    UkMapper.class
+                    UkMapper.class,
+                    HighLowsMapper.class,
+                    MacdMapper.class,
+                    RsiMapper.class
             };
             for(Class mapper:mappers){
                 sqlSessionFactory.getConfiguration().addMapper(mapper);

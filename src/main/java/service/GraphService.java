@@ -47,11 +47,13 @@ public class GraphService {
 
         //마지막
         sum = 0;
+        int count=0;
         for(int i=divNum*11 ; i<data.size() ; i++){
             tmp = (data.get(i)).replace(",","");
             sum += Double.parseDouble(tmp);
+            count++;
         }
-        list.add(Double.toString(sum/divNum));
+        list.add(Double.toString(sum/count));
 
         result.setList(list);
         return result;
