@@ -69,5 +69,22 @@ public class AnalysisDAO {
         return b;
     }
 
+    public boolean update(AnalysisDTO dto){
+        boolean b = false;
+        SqlSession session = sqlSessionFactory.openSession();
+        AnalysisMapper mapper = (AnalysisMapper) session.getMapper(MapperList.getAnalysisMapperList[kind]);
+        try{
+            b = mapper.update(dto);
+            session.commit();
+        }catch (Exception e) {
+            e.getStackTrace();
+            session.rollback();
+        }finally {
+            session.close();
+        }
+        return b;
+    }
+
+
 
 }

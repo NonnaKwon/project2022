@@ -4,6 +4,7 @@ import controller.MyBatisConnectionFactory;
 import org.apache.ibatis.session.SqlSessionFactory;
 import persistence.dao.DAO;
 import persistence.dto.*;
+import readAPI.MACD;
 import readAPI.ReadData;
 import service.AlertService;
 import service.CalculateService;

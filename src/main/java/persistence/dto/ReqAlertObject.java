@@ -11,6 +11,8 @@ import java.io.Serializable;
 @ToString
 public class ReqAlertObject implements Serializable {
     private static final long serialVersionUID = 2L;
-    private String currencytmp; //
+    private String currencytmp;
     private String alertAmount;
+
+
 }

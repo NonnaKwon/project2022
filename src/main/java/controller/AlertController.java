@@ -1,12 +1,9 @@
 package controller;
 
-import org.apache.ibatis.session.SqlSessionFactory;
 import persistence.dto.ReqAlertDTO;
 import persistence.dto.ResAlertDTO;
 import service.AlertService;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class AlertController {

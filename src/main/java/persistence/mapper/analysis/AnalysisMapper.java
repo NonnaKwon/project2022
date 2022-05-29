@@ -9,4 +9,5 @@ public interface AnalysisMapper {
     public ArrayList<AnalysisDTO> selectAll();
     public double selectFigure(@Param("forex") String forex);
     public boolean insert(AnalysisDTO dto);
+    public boolean update(AnalysisDTO dto);
 }

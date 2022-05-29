@@ -58,6 +58,4 @@ public class GraphService {
         result.setList(list);
         return result;
     }
-
-
 }

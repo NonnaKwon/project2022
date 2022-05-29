@@ -20,4 +20,7 @@ public interface RsiMapper extends AnalysisMapper{
 
     @Insert("INSERT INTO "+tableName+" values (#{forex}, #{figure})")
     public boolean insert(AnalysisDTO dto);
+
+    @Update("UPDATE "+tableName+" SET figure = #{figure} WHERE forex = #{forex}")
+    public boolean update(AnalysisDTO dto);
 }

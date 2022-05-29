@@ -19,11 +19,8 @@ public class AnalysisController {
 
     public void run(int code,byte[] data) throws IOException, ClassNotFoundException{
         switch (code){
-            case 11111: // 분석 요청 코드
+            case Protocol.CODE_REQ_ANALYSIS : // 분석 요청 코드
                 analysisControll(data);
-                break;
-            case 2:
-
                 break;
             default:
 
@@ -33,6 +30,6 @@ public class AnalysisController {
     public void analysisControll(byte[] data) throws IOException, ClassNotFoundException {
         ReqTableDTO requestDTO = (ReqTableDTO) Protocol.convertBytesToObject(data);
         ResTableDTO result = analysisService.analysisService(requestDTO);
-        Protocol.responseToClient(1111111,11111111,result); // 응답 타입, 코드넣기
+        Protocol.responseToClient(Protocol.TYPE_RES_ANALYSIS,Protocol.CODE_RES_ANALYSIS,result); // 응답 타입, 코드넣기
     }
 }
