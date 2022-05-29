@@ -37,7 +37,7 @@ public class RSI {
 
     public void doRsi(){
         for(int i=0;i<COUNTRY_COUNT;i++){ //나라별로
-            double[] bkprList = putListData(15,i);
+            double[] bkprList = putListData(200,i);
             double[] result = count(bkprList);
 
             AnalysisDTO analysisDTO = new AnalysisDTO();

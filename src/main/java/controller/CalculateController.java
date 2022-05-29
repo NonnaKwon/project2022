@@ -18,16 +18,10 @@ public class CalculateController {
     public void run(int code,byte[] data) throws IOException, ClassNotFoundException{
         switch (code){
             case Protocol.CODE_REQ_CALCUALTE: // 외화 -> 한국돈
-                koreaToOtherExchange(data);
-
-                break;
-            case 2: // 한국돈 -> 외화
                 otherToKoreaExchange(data);
                 break;
             default:
-
         }
-
     }
 
     public void otherToKoreaExchange(byte[] data){
@@ -35,18 +29,6 @@ public class CalculateController {
         try {
             requestDTO = (ReqCalculationDTO) Protocol.convertBytesToObject(data);
             ResCalculationDTO result = calculateService.otherToKoreaService(requestDTO);
-            Protocol.responseToClient(1,1,result);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void koreaToOtherExchange(byte[] data)  {
-        try{
-            ReqCalculationDTO requestDTO = (ReqCalculationDTO) Protocol.convertBytesToObject(data);
-            ResCalculationDTO result = calculateService.koreaToOtherService(requestDTO);
             Protocol.responseToClient(Protocol.TYPE_RES_CALCULATE,Protocol.CODE_RES_CALCUALTE,result);
         } catch (IOException e) {
             e.printStackTrace();
@@ -54,6 +36,7 @@ public class CalculateController {
             e.printStackTrace();
         }
     }
+
 
 
 

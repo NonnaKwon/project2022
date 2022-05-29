@@ -12,12 +12,7 @@ import java.util.ArrayList;
 
 public class TestMain {
     public static void main(String[] args) {
-        SqlSessionFactory sqlSessionFactory = MyBatisConnectionFactory.getSqlSessionFactory();
-        ArrayList<DTO> list = ReadData.dayTimeRead(sqlSessionFactory);
-        for(int i=0;i<list.size();i++){
-            System.out.println((list.get(i)).toString());
-        }
-
+        ReadData.allDataRead("2022");
     }
 
     public static void now(){

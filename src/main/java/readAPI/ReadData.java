@@ -36,6 +36,17 @@ public class ReadData {
     private static final int MONTH_MAX = 12;
 
 
+    public static void initPutDate(){
+        RSI r = new RSI(14);
+        r.doRsi();
+        MACD macd = new MACD();
+        macd.doMacd();
+        HighsLows highsLows = new HighsLows();
+        highsLows.doHighsLows();
+
+        allDataRead("2022");
+    }
+
     public static void allDataRead(String year) { //과거데이터 읽기
         sqlSessionFactory = MyBatisConnectionFactory.getSqlSessionFactory();
         daos = new DAO[COUNTRY_COUNT];
@@ -59,6 +70,13 @@ public class ReadData {
                     String inputLine;
                     JSONArray a = null;
                     while ((inputLine = in.readLine()) != null) {
+                        if(inputLine.equals("[]")){
+                            System.out.println("nullCount : "+nullCount);
+                            nullCount++;
+                            if(nullCount == 30){
+                                return;
+                            }
+                        }
                         a = (JSONArray) parser.parse(inputLine);
                     }
                     for (Object o : a) {
